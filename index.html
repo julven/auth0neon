@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>test auth</title>
+</head>
+<body>
+	<div id="app"></div>
+	<script type="text/javascript" src="https://cdn.auth0.com/js/auth0/9.18/auth0.min.js"></script>
+	<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+	<script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+	<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+	<script type="text/javascript">
+		const init = async () => {
+			let compiled = []
+			let promises = []
+			const jsx = [
+				"declares.js",
+				"neon_page.jsx",
+				"index.jsx",	
+				];
+
+			jsx.forEach( x => {
+				promises.push( () => fetch(x))
+			})
+
+			// console.log(promises)
+
+			let resp = await Promise.all(promises.map( x => x()))
+
+			for( x in resp) {
+				let text = await resp[x].text()
+				// console.log(text)
+				compiled.push(text)
+			}
+
+
+			// console.log(compiled.join(' '))
+			const result = Babel.transform(compiled.join(';\n'), {
+				presets: ['es2017', 'react']
+			}).code
+
+			navigator.clipboard.writeText(result).then(function() {
+			  console.log('Async: Copying to clipboard was successful!');
+			}, function(err) {
+			  console.error('Async: Could not copy text: ', err);
+			});
+
+			// console.log(result)
+
+			new Function(result)()
+		}
+
+		init()
+	</script>
+</body>
+</html>
