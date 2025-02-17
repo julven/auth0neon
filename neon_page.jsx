@@ -3,12 +3,13 @@ const NeonPage = () => {
 	const [ids, setIds] = useState([])
 	const [list, setList] = useState([])
 	const [selectedId, setSelectedId] = useState(null)
+	const [marketplaceList, setMarketplaceList] =useState([])
 
-	const fetchData = async (query) => {
+	const fetchData = async (query,endpoint) => {
 		let headerData = new Headers()
 		headerData.append("Content-Type", "application/json");
 
-		let data = await fetch(`https://y74j6u4w7p35lv2qf3z3dicizm0dpces.lambda-url.us-east-1.on.aws/neon-query`, {
+		let data = await fetch(`${apiUrl}${endpoint}`, {
 			method:"POST",
 			headers: headerData,
 			body: JSON.stringify({query})
@@ -29,7 +30,7 @@ const NeonPage = () => {
 
 	const getIds = async () => {
 
-		let resp = await fetchData("SELECT DISTINCT(id) FROM client_entity_info_v2 ORDER BY id")
+		let resp = await fetchData("SELECT DISTINCT(id) FROM client_entity_info_v2 ORDER BY id", "/neon-query")
 
 		console.log({getIds: {resp}})
 
@@ -42,7 +43,7 @@ const NeonPage = () => {
 
 		// console.log({getList: {id}})
 
-		let resp = await fetchData("SELECT * FROM client_entity_info_v2 WHERE id = "+id)
+		let resp = await fetchData("SELECT * FROM client_entity_info_v2 WHERE id = "+id, '/neon-query')
 
 		console.log({getList: {resp}})
 
@@ -58,10 +59,26 @@ const NeonPage = () => {
 		return keyArr
 	}
 
+	const getMarketPlace = async () => {
+
+		let resp = await fetchData("SELECT * FROM marketplace_info","/neon-market")
+
+		console.log({getMarketPlace: {resp}})
+
+		setMarketplaceList(resp)	
+	}
+
+	const getMarketPlaceCountry = (id) => {
+
+		return marketplaceList.filter( x => x.marketplaceid == id)[0].country
+	}
+
 
 
 	useEffect(() => {
 		getIds()
+		getMarketPlace()
+
 	}, [])
 
 	useEffect(() => {
@@ -83,38 +100,45 @@ const NeonPage = () => {
 			</div>
 			{selectedId != null && list.length > 0?
 			<div>
-				<p>selected Entity '{selectedId}'</p>
-				<table className="entity-table">	
-					<thead>
-						<tr>
-							{getKeys(list[0]).map( xx => (
-							<th key={xx}>
-								{xx}
-							</th>
+				<p>
+				entity id: {selectedId} <br/>
+				company name: {list[0].company_name} <br/>
+				client info id: {list[0].client_info_id || 'n/a'}
+
+
+				</p>
+				<div style={{maxWidth: '100%', overflowX: "scroll"}}>
+					<table className="entity-table">	
+						<thead>
+							<tr>
+								{getKeys(list[0]).map( xx => (
+								<th key={xx}>
+									{xx}
+								</th>
+								))
+
+								}
+							</tr>
+						</thead>
+						<tbody>
+							{list.map( (x, i) => (
+							<tr key={`${x}-${i}`}>
+								{getKeys(x).map( (xx, ii) => (
+								<td key={`${ii}-${xx}`}>
+									{xx == 'marketplace_id' ? `${getMarketPlaceCountry(x[xx])}`: x[xx]}
+								</td>
+								))
+
+								}
+
+							</tr>
+
 							))
 
 							}
-						</tr>
-					</thead>
-					<tbody>
-						{list.map( (x, i) => (
-						<tr key={`${x}-${i}`}>
-							{getKeys(x).map( (xx, ii) => (
-							<td key={`${ii}-${xx}`}>
-								{x[xx]}
-							</td>
-							))
-
-							}
-
-						</tr>
-
-						))
-
-						}
-					</tbody>
-				</table>
-
+						</tbody>
+					</table>
+				</div>
 			</div>
 			:
 			null
