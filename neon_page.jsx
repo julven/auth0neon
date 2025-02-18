@@ -4,6 +4,7 @@ const NeonPage = () => {
 	const [list, setList] = useState([])
 	const [selectedId, setSelectedId] = useState(null)
 	const [marketplaceList, setMarketplaceList] =useState([])
+	const [agencyList, setAgencyList] = useState([])
 
 	const fetchData = async (query,endpoint) => {
 		let headerData = new Headers()
@@ -68,6 +69,20 @@ const NeonPage = () => {
 		setMarketplaceList(resp)	
 	}
 
+	const getAgencyList = async () => {
+
+		let resp  = await fetchData("SELECT * FROM client_agency_info", "/neon-market")
+
+		console.log({getAgencyList: {resp}})
+
+		setAgencyList(resp)
+
+	}
+
+	const getAgencyName = (id) => {
+		return agencyList.filter( x => x.id == id)[0].agency_name
+	}
+
 	const getMarketPlaceCountry = (id) => {
 
 		return marketplaceList.filter( x => x.marketplaceid == id)[0].country
@@ -78,7 +93,7 @@ const NeonPage = () => {
 	useEffect(() => {
 		getIds()
 		getMarketPlace()
-
+		getAgencyList()
 	}, [])
 
 	useEffect(() => {
@@ -102,8 +117,12 @@ const NeonPage = () => {
 			<div>
 				<p>
 				entity id: {selectedId} <br/>
+
+				client info id: {list[0].client_info_id || 'n/a'}<br/>
 				company name: {list[0].company_name} <br/>
-				client info id: {list[0].client_info_id || 'n/a'}
+				agency name: {getAgencyName(list[0].agency_id)} <br/>
+				
+				
 
 
 				</p>
@@ -125,7 +144,14 @@ const NeonPage = () => {
 							<tr key={`${x}-${i}`}>
 								{getKeys(x).map( (xx, ii) => (
 								<td key={`${ii}-${xx}`}>
-									{xx == 'marketplace_id' ? `${getMarketPlaceCountry(x[xx])}`: x[xx]}
+									{xx == 'marketplace_id' ? 
+									`${getMarketPlaceCountry(x[xx])}`
+									: 
+									xx == 'agency_id' ? 
+									`${getAgencyName(x[xx])}`
+									: 
+									x[xx]
+									}
 								</td>
 								))
 
