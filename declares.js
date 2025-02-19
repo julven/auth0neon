@@ -10,6 +10,7 @@ const apiUrl = live ?
 	: 
 	'http://localhost:3000';
 
-const client = 'nEBhH88sL6SZeY5Iuag9DYUfKd9teVW9';
+const client = 'nEBhH88sL6SZeY5Iuag9DYUfKd9teVW9';	
 
-const {useState, useEffect} = React
+const {useState, useEffect, useContext, createContext} = React
+let AppContext = createContext();

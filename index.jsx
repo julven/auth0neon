@@ -247,6 +247,7 @@ useEffect(() => {
 						<a href="#" onClick={e => changePasswordHandler(e, true)}>change password</a>
 						<hr/>
 						<NeonPage />
+					
 					</div>
 				}
 					
@@ -314,8 +315,8 @@ useEffect(() => {
 
 const root = ReactDOM.createRoot(document.getElementById('app'));
 root.render(
-	
+	<AppContextProvider>
 		<Index />
-	
+	</AppContextProvider>
 );
 

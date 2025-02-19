@@ -1,32 +1,14 @@
 const NeonPage = () => {
 
+	const { selectedId, setSelectedId, fetchData, getKeys } = useContext(AppContext)
+
 	const [ids, setIds] = useState([])
+
 	const [list, setList] = useState([])
-	const [selectedId, setSelectedId] = useState(null)
+	
 	const [marketplaceList, setMarketplaceList] =useState([])
 	const [agencyList, setAgencyList] = useState([])
 
-	const fetchData = async (query,endpoint) => {
-		let headerData = new Headers()
-		headerData.append("Content-Type", "application/json");
-
-		let data = await fetch(`${apiUrl}${endpoint}`, {
-			method:"POST",
-			headers: headerData,
-			body: JSON.stringify({query})
-		})
-
-		if(!data.ok) {
-			console.log({fetchData: {err: "ERROR!"}})
-			return
-		}
-
-		data = await data.json()
-
-		return data
-
-
-	}
 
 
 	const getIds = async () => {
@@ -53,12 +35,7 @@ const NeonPage = () => {
 		return
 	}
 
-	const getKeys = (x) => {
-		let keyArr = Object.keys(x)
-
-		console.log({getKeys: {keyArr}})
-		return keyArr
-	}
+	
 
 	const getMarketPlace = async () => {
 
@@ -103,6 +80,7 @@ const NeonPage = () => {
 	return (
 		<div>
 			<p>list of entity id</p>
+			
 			<div style={{maxWidth: '100%', overflowX: "scroll"}}>
 				{ids.map( x => (
 				<span key={x}>
@@ -122,9 +100,6 @@ const NeonPage = () => {
 				company name: {list[0].company_name} <br/>
 				agency name: {getAgencyName(list[0].agency_id)} <br/>
 				
-				
-
-
 				</p>
 				<div style={{maxWidth: '100%', overflowX: "scroll"}}>
 					<table className="entity-table">	
@@ -165,7 +140,12 @@ const NeonPage = () => {
 						</tbody>
 					</table>
 				</div>
+
+				<BigQuery />
+
+
 			</div>
+
 			:
 			null
 			}
