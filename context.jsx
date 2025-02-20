@@ -2,6 +2,12 @@ let AppContextProvider = ({children}) => {
 
 	const [selectedId, setSelectedId] = useState(null)
 
+	const [currentPage, setCurrentPage] = useState(null)
+	const [pages, setPages] = useState(0)
+	const [pageLimit] = useState(100)
+	const [count, setCount ] = useState(0)
+	
+
 	const fetchData = async (query,endpoint) => {
 		let headerData = new Headers()
 		headerData.append("Content-Type", "application/json");
@@ -25,8 +31,7 @@ let AppContextProvider = ({children}) => {
 	}
 	const getKeys = (x) => {
 		let keyArr = Object.keys(x)
-
-		console.log({getKeys: {keyArr}})
+		// console.log({getKeys: {keyArr}})
 		return keyArr
 	}
 
@@ -34,7 +39,12 @@ let AppContextProvider = ({children}) => {
 		<AppContext.Provider value={{
 			selectedId, setSelectedId,
 			fetchData,
-			getKeys
+			getKeys,
+			currentPage, setCurrentPage,
+			pages, setPages,
+			pageLimit,
+			count, setCount ,
+	
 		}}>
 
 			{children}

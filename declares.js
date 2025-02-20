@@ -13,4 +13,4 @@ const apiUrl = live ?
 const client = 'nEBhH88sL6SZeY5Iuag9DYUfKd9teVW9';	
 
 const {useState, useEffect, useContext, createContext} = React
-let AppContext = createContext();
+let AppContext = createContext();	
