@@ -1,7 +1,7 @@
-const live = true
+const live = false
 
 const baseUrl = live ? 
-	'https://julven.github.io/auth0neon/' 
+	'https://julven.github.io/auth0neon' 
 	: 
 	'http://localhost/test-auth';
 
@@ -13,4 +13,21 @@ const apiUrl = live ?
 const client = 'nEBhH88sL6SZeY5Iuag9DYUfKd9teVW9';	
 
 const {useState, useEffect, useContext, createContext} = React
+const { createRoot, Link, Navigate, Outlet, Route, Routes, BrowserRouter, HashRouter, useParams, useLocation, Switch  } = ReactRouterDOM
+// const {createRoot} = ReactRouterDOM
+
+
 let AppContext = createContext();	
+
+const options = {
+		domain: 'bispoke-dev.us.auth0.com',
+		clientID: client,
+		// redirectUri: 'http://localhost/test-auth',
+		redirectUri: `${baseUrl}/callback`,
+		responseType: 'token id_token',
+		audience: `https://bispoke-dev.us.auth0.com/api/v2/`,
+		
+		scope: 'read:current_user update:current_user_identities update:current_user_metadata'
+	};
+
+let webAuth = new auth0.WebAuth(options)

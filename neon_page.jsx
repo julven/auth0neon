@@ -1,11 +1,13 @@
 const NeonPage = () => {
 
-	const { selectedId, setSelectedId, fetchData, getKeys } = useContext(AppContext)
+	const { selectedId, setSelectedId, fetchData, getKeys,list, setList } = useContext(AppContext)
+
+	const {id} = useParams()
 
 	const [ids, setIds] = useState([])
 
-	const [list, setList] = useState([])
 	
+	const [loading, setLoading] = useState(false)
 	const [marketplaceList, setMarketplaceList] =useState([])
 	const [agencyList, setAgencyList] = useState([])
 
@@ -13,26 +15,28 @@ const NeonPage = () => {
 
 	const getIds = async () => {
 
+
 		let resp = await fetchData("SELECT DISTINCT(id) FROM client_entity_info_v2 ORDER BY id", "/neon-query")
 
-		console.log({getIds: {resp}})
+		console.log({getIds: {resp, id}})
 
 		setIds(resp.map( x => x.id))
 		return
 	}
 
-	const getList = async (e, id) => {
-		e.preventDefault()
-
-		// console.log({getList: {id}})
+	const getList = async () => {
+		setSelectedId(id)
 
 		let resp = await fetchData("SELECT * FROM client_entity_info_v2 WHERE id = "+id, '/neon-query')
 
-		console.log({getList: {resp}})
+		console.log({getList: {resp, id}})
+
 
 		setList(resp)
-		setSelectedId(id)
+		
+
 		return
+		
 	}
 
 	
@@ -44,6 +48,8 @@ const NeonPage = () => {
 		console.log({getMarketPlace: {resp}})
 
 		setMarketplaceList(resp)	
+
+		return
 	}
 
 	const getAgencyList = async () => {
@@ -53,6 +59,8 @@ const NeonPage = () => {
 		console.log({getAgencyList: {resp}})
 
 		setAgencyList(resp)
+
+		return
 
 	}
 
@@ -68,14 +76,41 @@ const NeonPage = () => {
 
 
 	useEffect(() => {
-		getIds()
-		getMarketPlace()
-		getAgencyList()
+
+		console.log("neon-query")
+
+		;(async () => {
+			setLoading(true)
+			await getIds();
+			await getMarketPlace()
+			await getAgencyList()
+			// getList()
+			
+			setLoading(false)
+		})()
+		
+
+		
 	}, [])
 
+
+
 	useEffect(() => {
-		if(ids.length > 0)console.log({ids})
+		console.log({id})
+		if(id) {
+			getList()
+
+		} 
+	}, [id])
+	
+
+	useEffect(() => {
+		console.log({ids})
+		
 	}, [ids])
+
+
+	
 
 	return (
 		<div>
@@ -84,21 +119,21 @@ const NeonPage = () => {
 			<div style={{maxWidth: '100%', overflowX: "scroll"}}>
 				{ids.map( x => (
 				<span key={x}>
-					<a href="#"  onClick={e => getList(e, x)}>{x}</a>&nbsp;
+					<Link to={`/${x}`}>{x}</Link>&nbsp;
 				</span>
 				
 				))
 
 				}
 			</div>
-			{selectedId != null && list.length > 0?
+			{list.length > 0?
 			<div>
 				<p>
 				entity id: {selectedId} <br/>
 
 				client info id: {list[0].client_info_id || 'n/a'}<br/>
 				company name: {list[0].company_name} <br/>
-				agency name: {getAgencyName(list[0].agency_id)} <br/>
+				agency name: { agencyList.length > 0 && getAgencyName(list[0].agency_id)} <br/>
 				
 				</p>
 				<div style={{maxWidth: '100%', overflowX: "scroll"}}>
@@ -120,10 +155,10 @@ const NeonPage = () => {
 								{getKeys(x).map( (xx, ii) => (
 								<td key={`${ii}-${xx}`}>
 									{xx == 'marketplace_id' ? 
-									`${getMarketPlaceCountry(x[xx])}`
+									`${marketplaceList.lenegth > 0 &&  getMarketPlaceCountry(x[xx])}`
 									: 
 									xx == 'agency_id' ? 
-									`${getAgencyName(x[xx])}`
+									`${agencyList.length > 0  && getAgencyName(x[xx])}`
 									: 
 									x[xx]
 									}
@@ -141,7 +176,7 @@ const NeonPage = () => {
 					</table>
 				</div>
 
-				<BigQuery />
+				<BigQuery />	
 
 
 			</div>

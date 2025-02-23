@@ -9,10 +9,11 @@ const BigQuery = () => {
 		pages, setPages,
 		count, setCount,
 		pageLimit,
+		list, setList
 		
 	} = useContext(AppContext)
 	const [dataList, setDataList] = useState([])
-	const [loading, setLoading] = useState(false)
+
 	const [selectedColumns, setSelectedColumns] = useState([])
 	const [columns, setColumns] = useState([])
 
@@ -30,16 +31,19 @@ const BigQuery = () => {
 
 		let resp = await fetchData(sql, "/bigquery-sql")
 		let total = Math.ceil(resp[0].count / pageLimit)
-		setCount(resp[0].count)
-		setPages(total)
+		console.log({getListCount: {resp}})
+		// setCount(resp[0].count)
+		setPages(total)	
 		
-		getDataList()
+		
+	
 
 		return
 	}
 
 	const getDataList = async () => {
-		setLoading(true)
+		setDataList([])
+		
 		console.log("getDataList "+ (Math.random() + 1).toString(36).substring(7))
 		
 
@@ -50,7 +54,7 @@ const BigQuery = () => {
 		console.log({getDataList: {resp}})
 
 		setDataList(resp)
-		setLoading(false)
+	
 		return
 	}
 
@@ -66,16 +70,21 @@ const BigQuery = () => {
 	}
 
 	useEffect(() => {
-		resetPage()
-		if(selectedId) {
-
-			;(async () => await getListCount())()
+		// if(list.length > 0) {
+		if(selectedId >= 0) {
+			;(async () => {
+				resetPage()
+	 			await getListCount()
+		 		await getDataList()
+		 		
+		 	})()
 		}
+			
 	}, [selectedId])
 
 	useEffect(() => {
-	
-		 if(!loading) getDataList()
+		
+		getDataList()
 	}, [currentPage])
 
 	useEffect(() => {
@@ -83,10 +92,10 @@ const BigQuery = () => {
 		// console.log(columns)
 	}, [columns])
 
-	useEffect(() => {
+	// useEffect(() => {
 
-		console.log({selectedColumns})
-	}, [selectedColumns])
+	// 	console.log({selectedColumns})
+	// }, [selectedColumns])
 
 	useEffect(() => {
 		if(dataList.length > 0 && columns.length == 0) setColumns(Object.keys(dataList[0]))
@@ -96,7 +105,7 @@ const BigQuery = () => {
 		<div>
 			<p>
 				big query <br/>
-				showing {count} result(s)
+				{/*showing {count} result(s)*/}
 			</p>
 
 			<p>column list</p>

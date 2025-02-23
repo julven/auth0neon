@@ -6,6 +6,16 @@ let AppContextProvider = ({children}) => {
 	const [pages, setPages] = useState(0)
 	const [pageLimit] = useState(100)
 	const [count, setCount ] = useState(0)
+	const [authUser, setAuthUser] = useState({
+		email: "",
+		user_id: "",
+		nickname: "",
+		email_verified: "",
+	})
+	const [token, setToken] = useState(null)	
+	const [initUrl, setInitUrl] = useState("/")
+	const [list, setList] = useState([])
+	const [loginLoaded, setLoginLoaded] = useState(false)
 	
 
 	const fetchData = async (query,endpoint) => {
@@ -44,7 +54,12 @@ let AppContextProvider = ({children}) => {
 			pages, setPages,
 			pageLimit,
 			count, setCount ,
-	
+			authUser, setAuthUser,
+			token, setToken,
+			initUrl, setInitUrl,
+			list, setList,
+			loginLoaded, setLoginLoaded
+			
 		}}>
 
 			{children}
