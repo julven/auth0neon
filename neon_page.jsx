@@ -1,10 +1,11 @@
 const NeonPage = () => {
 
-	const { selectedId, setSelectedId, fetchData, getKeys,list, setList } = useContext(AppContext)
+	const { selectedId, setSelectedId, fetchData, getKeys,list, setList, getIds,  ids, setIds, neonUser} = useContext(AppContext)
 
 	const {id} = useParams()
+	const navigate = useNavigate()
 
-	const [ids, setIds] = useState([])
+	
 
 	
 	const [loading, setLoading] = useState(false)
@@ -13,26 +14,24 @@ const NeonPage = () => {
 
 
 
-	const getIds = async () => {
-
-
-		let resp = await fetchData("SELECT DISTINCT(id) FROM client_entity_info_v2 ORDER BY id", "/neon-query")
-
-		console.log({getIds: {resp, id}})
-
-		setIds(resp.map( x => x.id))
-		return
-	}
+	
 
 	const getList = async () => {
-		setSelectedId(id)
-
+	
+		if(neonUser.role == "normal" && neonUser.entity_id != Number(id)) return;
+		
 		let resp = await fetchData("SELECT * FROM client_entity_info_v2 WHERE id = "+id, '/neon-query')
 
-		console.log({getList: {resp, id}})
+		
+		console.log({getList: {resp, id, role: neonUser.role, entity_id: neonUser.entity_id, }}	)
 
+		if((neonUser.role == "admin") || (neonUser.role == "normal" && neonUser.entity_id == Number(id))) {
 
-		setList(resp)
+			setList(resp);
+
+			setSelectedId(id)
+		}
+		
 		
 
 		return
@@ -97,35 +96,48 @@ const NeonPage = () => {
 
 	useEffect(() => {
 		console.log({id})
-		if(id) {
-			getList()
-
-		} 
-	}, [id])
-	
+		 if(id && neonUser.role) getList();
+		
+	}, [id, neonUser])
 
 	useEffect(() => {
-		console.log({ids})
-		
-	}, [ids])
+		if(neonUser.role == "normal") {
+			console.log({neonUser})
+			navigate(`/${neonUser.entity_id}`)
+
+		}
+	}, [neonUser])
+	
+
+
+
 
 
 	
 
 	return (
 		<div>
-			<p>list of entity id</p>
 			
-			<div style={{maxWidth: '100%', overflowX: "scroll"}}>
-				{ids.map( x => (
-				<span key={x}>
-					<Link to={`/${x}`}>{x}</Link>&nbsp;
-				</span>
-				
-				))
+			{neonUser && neonUser.role == "admin" ?
+			<div>
+				<p>list of entity id</p>
+				<div style={{maxWidth: '100%', overflowX: "scroll"}}>
+					{ids.map( x => (
+					<span key={x}>
+						<Link to={`/${x}`}>{x}</Link>&nbsp;
+					</span>
+					
+					))
 
-				}
+					}
+				</div>
 			</div>
+			
+			:
+			null
+
+			}
+			
 			{list.length > 0?
 			<div>
 				<p>
@@ -185,16 +197,7 @@ const NeonPage = () => {
 			null
 			}
 
-		<style jsx="true">{`
-			
-			.entity-table tr, .entity-table td,  .entity-table th, .entity-table  {
-				border: 1px solid black;
-				border-collapse: collapse;
-				padding: 3px;
-			}
-		`}
-
-		</style>
+		
 		</div>
 
 	)

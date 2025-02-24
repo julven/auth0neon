@@ -84,7 +84,7 @@ const BigQuery = () => {
 
 	useEffect(() => {
 		
-		getDataList()
+		if(selectedId >= 0)  getDataList()
 	}, [currentPage])
 
 	useEffect(() => {

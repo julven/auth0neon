@@ -104,7 +104,11 @@ const Login = () => {
 		
 		
 	}, [mode])
-	
+
+
+	useEffect(() => {
+		console.log({webAuth})
+	}, [])
 
 	return (
 		<div>

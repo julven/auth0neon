@@ -3,12 +3,22 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title></title>
+	<title>authorize</title>
+	<script type="text/javascript" src="https://cdn.auth0.com/js/auth0/9.18/auth0.min.js"></script>
+	<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+	<script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+	<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+	<script  src="https://unpkg.com/history@5/umd/history.development.js" crossorigin></script>
+    <script  src="https://unpkg.com/react-router@6.3.0/umd/react-router.development.js" crossorigin></script>
+    <script  src="https://unpkg.com/react-router-dom@6.3.0/umd/react-router-dom.development.js" crossorigin></script>
 </head>
 <body>
 	loading...
+	<script type="text/javascript" src="../declares.js"></script>
 	<script type="text/javascript">	
-		window.location.href = "http://localhost/test-auth"
+		console.log({baseUrl})
+		window.location.href = baseUrl
 		// window.location.href = "https://julven.github.io/auth0neon"
 	</script>
 </body>

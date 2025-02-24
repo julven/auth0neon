@@ -16,7 +16,8 @@ let AppContextProvider = ({children}) => {
 	const [initUrl, setInitUrl] = useState("/")
 	const [list, setList] = useState([])
 	const [loginLoaded, setLoginLoaded] = useState(false)
-	
+	const [ids, setIds] = useState([])
+	const [neonUser, setNeonUser] = useState({})
 
 	const fetchData = async (query,endpoint) => {
 		let headerData = new Headers()
@@ -45,6 +46,17 @@ let AppContextProvider = ({children}) => {
 		return keyArr
 	}
 
+	const getIds = async () => {
+
+
+		let resp = await fetchData("SELECT DISTINCT(id) FROM client_entity_info_v2 ORDER BY id", "/neon-query")
+
+		console.log({getIds: {resp}})
+
+		setIds(resp.map( x => x.id))
+		return resp.map( x => x.id)
+	}
+
 	return (
 		<AppContext.Provider value={{
 			selectedId, setSelectedId,
@@ -58,7 +70,10 @@ let AppContextProvider = ({children}) => {
 			token, setToken,
 			initUrl, setInitUrl,
 			list, setList,
-			loginLoaded, setLoginLoaded
+			loginLoaded, setLoginLoaded,
+			getIds,
+			ids, setIds,
+			neonUser, setNeonUser
 			
 		}}>
 

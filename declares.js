@@ -1,4 +1,4 @@
-const live = false
+const live = true
 
 const baseUrl = live ? 
 	'https://julven.github.io/auth0neon' 
@@ -12,8 +12,8 @@ const apiUrl = live ?
 
 const client = 'nEBhH88sL6SZeY5Iuag9DYUfKd9teVW9';	
 
-const {useState, useEffect, useContext, createContext} = React
-const { createRoot, Link, Navigate, Outlet, Route, Routes, BrowserRouter, HashRouter, useParams, useLocation, Switch  } = ReactRouterDOM
+const {useState, useEffect, useContext, createContext } = React
+const { createRoot, Link, Navigate, Outlet, Route, Routes, BrowserRouter, HashRouter, useParams, useLocation, useNavigate  } = ReactRouterDOM
 // const {createRoot} = ReactRouterDOM
 
 

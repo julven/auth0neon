@@ -2,7 +2,7 @@ const Account = () => {
 
 	const {
 		authUser, setAuthUser,
-		
+		neonUser
 	} = useContext(AppContext)
 
 	const [resetPassSent, setResetPassSent] = useState(false)
@@ -71,7 +71,8 @@ const Account = () => {
 				user id: {authUser.user_id} <br/>
 				name: {authUser.nickname} <br/>
 				email verfied: {authUser.email_verified ? 'yes' : 'no'} <br/>
-
+				role: {neonUser && neonUser.role} <br/>
+				entity id: {neonUser && neonUser.entity_id} 
 				</p>
 				<button onClick={logoutHandler}>logout</button>
 				<br/>
