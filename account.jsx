@@ -38,7 +38,7 @@ const Account = () => {
 
 	const logoutHandler = async () => {
 		await webAuth.logout({
-		  returnTo: baseUrl,
+		  returnTo: baseUrl+"/callback",
 		  clientID: client
 		});
 
