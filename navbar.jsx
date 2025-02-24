@@ -5,12 +5,17 @@ const Navbar = () => {
 
 	return(
 		<div>
+		{token && neonUser.email ? 
 			<div>
 				<span><Link to="/">Home</Link></span>&nbsp;
 				{neonUser.role == "admin"&& <>|&nbsp;<span><Link to="/users">Users</Link></span>&nbsp;</>}
 				|&nbsp;<span><Link to="/account">Account</Link></span>&nbsp;
 				{/*|&nbsp;<span><Link to="/login">Login</Link></span>&nbsp;*/}
 			</div>
+		:
+		null
+		}
+			
 
 			
 
