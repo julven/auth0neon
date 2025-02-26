@@ -1,9 +1,9 @@
-const live = true
+const live = false
 
 const baseUrl = live ? 
 	'https://julven.github.io/auth0neon' 
 	: 
-	'http://localhost/test-auth';
+	'http://localhost/auth0neon';	
 
 const apiUrl = live ? 
 	'https://y74j6u4w7p35lv2qf3z3dicizm0dpces.lambda-url.us-east-1.on.aws' 

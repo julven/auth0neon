@@ -13,20 +13,25 @@ const NeonPage = () => {
 	const [agencyList, setAgencyList] = useState([])
 
 
+	const getRoleView = () => {
 
+		return ["admin","owner"].includes(neonUser.role) 
+	}
 	
 
 	const getList = async () => {
 	
 		if(neonUser.role == "normal" && neonUser.entity_id != Number(id)) return;
+
+		let addQuery = neonUser.agency_id ? `WHERE agency_id = ${neonUser.agency_id} AND id = ${Number(id)}` : ''
 		
-		let resp = await fetchData("SELECT * FROM client_entity_info_v2 WHERE id = "+id, '/neon-query')
+		let resp = await fetchData("SELECT * FROM client_entity_info_v2 "+addQuery, '/neon-query')
 
 		
-		console.log({getList: {resp, id, role: neonUser.role, entity_id: neonUser.entity_id, }}	)
+		console.log({getList: {neonUser, resp}}	)
 
-		if((neonUser.role == "admin") || (neonUser.role == "normal" && neonUser.entity_id == Number(id))) {
-
+		// if((neonUser.role == "admin") || (neonUser.role == "normal" && neonUser.entity_id == Number(id))) {
+		if( getRoleView() || (neonUser.role == "normal" && neonUser.entity_id == Number(id))) {
 			setList(resp);
 
 			setSelectedId(id)
@@ -69,7 +74,21 @@ const NeonPage = () => {
 
 	const getMarketPlaceCountry = (id) => {
 
-		return marketplaceList.filter( x => x.marketplaceid == id)[0].country
+		// return marketplaceList.filter( x => x.marketplaceid == id)[0].country
+		return id
+	}
+
+	const filterIds = async () => {
+
+		let resp = await fetchData(`SELECT DISTINCT(id) AS id FROM client_entity_info_v2 WHERE agency_id = ${neonUser.agency_id}`,"/neon-query")
+
+		console.log({filterIds: {resp}})
+
+		resp = resp.map( x => x.id)
+
+
+
+		setIds(resp)
 	}
 
 
@@ -80,7 +99,7 @@ const NeonPage = () => {
 
 		;(async () => {
 			setLoading(true)
-			await getIds();
+			// await getIds();
 			await getMarketPlace()
 			await getAgencyList()
 			// getList()
@@ -95,7 +114,7 @@ const NeonPage = () => {
 
 
 	useEffect(() => {
-		console.log({id})
+		console.log({id, neonUser})
 		 if(id && neonUser.role) getList();
 		
 	}, [id, neonUser])
@@ -106,10 +125,15 @@ const NeonPage = () => {
 			navigate(`/${neonUser.entity_id}`)
 
 		}
+		if(neonUser.role == "owner") {
+			filterIds()
+		}
 	}, [neonUser])
 	
 
+	useEffect(() => {
 
+	},[neonUser])
 
 
 
@@ -118,7 +142,7 @@ const NeonPage = () => {
 	return (
 		<div>
 			
-			{neonUser && neonUser.role == "admin" ?
+			{neonUser && getRoleView() ?
 			<div>
 				<p>list of entity id</p>
 				<div style={{maxWidth: '100%', overflowX: "scroll"}}>
@@ -166,9 +190,7 @@ const NeonPage = () => {
 							<tr key={`${x}-${i}`}>
 								{getKeys(x).map( (xx, ii) => (
 								<td key={`${ii}-${xx}`}>
-									{xx == 'marketplace_id' ? 
-									`${marketplaceList.lenegth > 0 &&  getMarketPlaceCountry(x[xx])}`
-									: 
+									{
 									xx == 'agency_id' ? 
 									`${agencyList.length > 0  && getAgencyName(x[xx])}`
 									: 

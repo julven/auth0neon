@@ -48,13 +48,30 @@ let AppContextProvider = ({children}) => {
 
 	const getIds = async () => {
 
-
-		let resp = await fetchData("SELECT DISTINCT(id) FROM client_entity_info_v2 ORDER BY id", "/neon-query")
+		let sql = `SELECT DISTINCT(id) FROM client_entity_info_v2  ORDER BY id`
+		
+		let resp = await fetchData(sql, "/neon-query")
 
 		console.log({getIds: {resp}})
 
 		setIds(resp.map( x => x.id))
 		return resp.map( x => x.id)
+	}
+
+	const getNeonUser = async () => {
+
+		let resp = await fetchData(`SELECT * from auth0_user where user_id = '${token.idTokenPayload.sub}'`, "/neon-query")
+
+		let resp2 = await fetchData(`SELECT * from agency where user_owner_id = '${token.idTokenPayload.sub}'`,"/neon-query")
+
+		resp = {
+			...resp[0],
+			...resp2[0],
+		}
+
+		console.log({getNeonUser: {resp}})
+
+		setNeonUser(resp)
 	}
 
 	return (
@@ -73,7 +90,8 @@ let AppContextProvider = ({children}) => {
 			loginLoaded, setLoginLoaded,
 			getIds,
 			ids, setIds,
-			neonUser, setNeonUser
+			neonUser, setNeonUser,
+			getNeonUser
 			
 		}}>
 

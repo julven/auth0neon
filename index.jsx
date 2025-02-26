@@ -13,7 +13,8 @@ const Index = () => {
 		initUrl, setInitUrl,
 		setLoginLoaded,
 		fetchData,
-		neonUser, setNeonUser
+		neonUser, setNeonUser,
+		getNeonUser
 
 	} = useContext(AppContext)
 
@@ -53,14 +54,9 @@ const Index = () => {
 		});
 	}
 
-	const getNeonUser = async () => {
 
-		let resp = await fetchData(`SELECT * from auth0_user where user_id = '${token.idTokenPayload.sub}'`, "/neon-query")
 
-		console.log({getNeonUser: {resp}})
 
-		setNeonUser(resp[0])
-	}
 
 
 	useEffect(() => {
@@ -72,7 +68,9 @@ const Index = () => {
 
 	useEffect(() => {
 		console.log({token})
-		if(token && token.idTokenPayload.sub) getNeonUser()
+		if(token && token.idTokenPayload.sub) {
+			getNeonUser()
+		} 
 	}, [token])
 
 
