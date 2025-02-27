@@ -6,11 +6,16 @@ const Login = () => {
 	const [user, setUser] = useState({
 		email: "",
 		password: "",
+		fname: "",
+		lname: "",
+		aname: "",
 	})
 	const [wrongPass, setWrongPass] = useState(false)	
 	const [userRegistered, setUserRegistered] = useState(false)
 	const [resetPass, setResetPass] = useState(false)
 	const [mode, setMode] = useState(1)
+	const [errList, setErrList] = useState([])
+	const [ generalError, setGeneralError] = useState("")
 	
 
 	const loginHandler = () => {
@@ -54,16 +59,38 @@ const Login = () => {
 	}
 
 	const registerUserHandler = () => {
-		console.log({registerUserHandler:  {user}})
+		// console.log({registerUserHandler:  {user}})
+		// return
+		setErrList([])
+		setGeneralError("")
+
+
+		let valid = true, errors = []
+		Object.keys(user).forEach( x => {
+			if(user[x] == "") {
+				console.log({[x] : user[x]})
+				valid = false
+				errors.push(x)
+			}
+		})
+		setErrList(errors)
+		if(!valid) return
+
 		webAuth.signup({
 			connection: "Username-Password-Authentication",
 			email: user.email,
 			password: user.password,
-
+			user_metadata: {
+				fname: user.fname,
+				lname: user.lname,
+				aname: user.aname,
+				role: "owner"
+			}
 		}, function (err) {
 			
 			if(err) {
 				console.log({registerUserHandler: {err}})
+				setGeneralError(err.description)
 				return 
 
 			} 
@@ -78,12 +105,14 @@ const Login = () => {
 	}
 
 	const forgetPasswordHandler = () => {
+		setGeneralError("")
 		 webAuth.changePassword({
 		      connection: 'Username-Password-Authentication',
 		      email:   user.email
 		    }, function (err, resp) {
 		      if(err){
-		        console.log(err.message);
+		        console.log({forgetPasswordHandler: {err}});
+		        setGeneralError(err.message)
 		      }else{
 		        console.log(resp);
 		        setResetPass(true)
@@ -110,6 +139,10 @@ const Login = () => {
 		console.log({webAuth})
 	}, [])
 
+	useEffect(() => {
+		console.log({errList})
+	}, [errList])
+
 	return (
 		<div>
 			{loginLoaded ? 
@@ -132,11 +165,22 @@ const Login = () => {
 				mode == 2 ?
 				<div>
 					<p>register</p>
+					{generalError != "" && <p>{generalError}</p>}
 					<input placeholder="email" type="email" value={user.email} onChange={e => userChangeHandler(e.target.value, 'email')}/>
-					<br/>
+					{errList.includes("email") && <>&nbsp; required</>}<br/><br/>
 					
 					<input placeholder="password" type="password" value={user.password} onChange={e => userChangeHandler(e.target.value, 'password')}/>
-					<br/>
+					{errList.includes("password") && <>&nbsp; required</>}<br/><br/>
+
+					<input placeholder="first name" type="text" value={user.fname} onChange={e => userChangeHandler(e.target.value, 'fname')}/>
+					{errList.includes("fname") && <>&nbsp; required</>}<br/><br/>
+
+					<input placeholder="last name" type="text" value={user.lname} onChange={e => userChangeHandler(e.target.value, 'lname')}/>
+					{errList.includes("lname") && <>&nbsp; required</>}<br/><br/>
+
+					<input placeholder="business/agency name" type="text" value={user.aname} onChange={e => userChangeHandler(e.target.value, 'aname')}/>
+					{errList.includes("aname") && <>&nbsp; required</>}<br/><br/>
+
 					<button onClick={registerUserHandler}>register</button>
 					<br/>
 					<a href="#" onClick={(e) =>registerHandler(e,1)}>cancel</a>

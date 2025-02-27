@@ -1,4 +1,4 @@
-const live = true
+const live = false
 
 const baseUrl = live ? 
 	'https://julven.github.io/auth0neon' 
@@ -20,7 +20,7 @@ const { createRoot, Link, Navigate, Outlet, Route, Routes, BrowserRouter, HashRo
 let AppContext = createContext();	
 
 const options = {
-		domain: 'bispoke-dev.us.auth0.com',
+		domain: 'bispoke-dev.us.auth0.com', 
 		clientID: client,
 		// redirectUri: 'http://localhost/test-auth',
 		redirectUri: `${baseUrl}/callback`,
