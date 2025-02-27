@@ -1,4 +1,4 @@
-const live = false
+const live = true
 
 const baseUrl = live ? 
 	'https://julven.github.io/auth0neon' 
