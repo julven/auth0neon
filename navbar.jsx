@@ -25,6 +25,8 @@ const Navbar = () => {
 				<Routes>	
 					<Route path="/" element={<Home />}/>
 					<Route path="/:id" element={<Home />}/>
+					<Route path="/add-product" element={<BigQueryAdd />}/>	
+					<Route path="/edit-product/:id" element={<BigQueryEdit />}/>	
 					<Route path="/users" element={<Users />}/>
 					<Route path="/users-view/:user-id" element={<UsersView />}/>
 					<Route path="/users-add" element={<UsersAdd />}/>

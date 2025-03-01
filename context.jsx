@@ -1,5 +1,22 @@
 let AppContextProvider = ({children}) => {
 
+	const [cols] = useState( [
+		"CAST(record_id as STRING) as record_id",
+		"marketplace_id",
+		"marketplace",
+		"client_id",
+		"child_asin",
+		"client_title",
+		"brand",
+		"cogs",
+		"client_name",
+		"client_sku",
+		"category",
+		"subcategory",
+		"attribute_1",
+		"attribute_2"
+	]);
+
 	const [selectedId, setSelectedId] = useState(null)
 
 	const [currentPage, setCurrentPage] = useState(null)
@@ -18,6 +35,10 @@ let AppContextProvider = ({children}) => {
 	const [loginLoaded, setLoginLoaded] = useState(false)
 	const [ids, setIds] = useState([])
 	const [neonUser, setNeonUser] = useState({})
+	const [marketplaceList, setMarketplaceList] =useState([])
+	const [columns, setColumns] = useState([])
+	const [displayColumns, setDisplayColumns] = useState([])
+	const [clientlist, setClientList] = useState([])
 
 	const fetchData = async (query,endpoint) => {
 		let headerData = new Headers()
@@ -58,6 +79,21 @@ let AppContextProvider = ({children}) => {
 		return resp.map( x => x.id)
 	}
 
+	const filterIds = async () => {
+
+		
+
+		let resp = await fetchData(`SELECT DISTINCT(id) AS id FROM client_entity_info_v2 WHERE agency_id = ${neonUser.agency_id} ORDER BY id` ,"/neon-query")
+
+		console.log({filterIds: {resp}})
+
+		resp = resp.map( x => x.id)
+
+
+
+		setIds(resp)
+	}
+
 	const getNeonUser = async () => {
 
 		let resp = await fetchData(`SELECT * from auth0_user where user_id = '${token.idTokenPayload.sub}'`, "/neon-query")
@@ -74,8 +110,89 @@ let AppContextProvider = ({children}) => {
 		setNeonUser(resp)
 	}
 
+	const getMarketPlace = async () => {
+
+		let resp = await fetchData("SELECT * FROM marketplace_info","/neon-market")
+
+		console.log({getMarketPlace: {resp}})
+
+		setMarketplaceList(resp)	
+
+		return
+	}
+
+	const getRoleView = () => {
+
+		return ["admin","owner"].includes(neonUser.role) 
+	}
+
+	const getList = async (id) => {
+
+		console.log({filterIds: {id}})
+	
+		if(neonUser.role == "normal" && neonUser.entity_id != Number(id)) return;
+
+		let addQuery = neonUser.agency_id ? `WHERE agency_id = ${neonUser.agency_id} AND id = ${Number(id)}` : ''
+		
+		let resp = await fetchData("SELECT * FROM client_entity_info_v2 "+addQuery, '/neon-query')
+
+		
+		console.log({getList: {neonUser, resp}}	)
+
+		// if((neonUser.role == "admin") || (neonUser.role == "normal" && neonUser.entity_id == Number(id))) {
+		if( getRoleView() || (neonUser.role == "normal" && neonUser.entity_id == Number(id))) {
+			setList(resp);
+
+			setSelectedId(id)
+		}
+		
+		
+
+		return
+		
+	}
+
+	const getColumns = async () => {
+		console.log("getColumns")
+		let sql = "SELECT column_name,data_type FROM `bispoke-sidekick.product_info.INFORMATION_SCHEMA.COLUMNS` WhERE table_name = 'product_adds_edits_deletes'"
+		let resp = await fetchData( sql, "/bigquery-sql" )
+
+		// console.log({getColumns: resp.map( x => x.column_name).join(",")})
+		setColumns(resp)	
+		let final = []
+		resp.forEach( x => {
+			if(!["record_id","IS_ADD_EDIT_DELETE","BY_USER","marketplace"].includes(x.column_name)) {
+				final.push(x)
+			}
+		})
+		final = final.map( x => {
+			return {
+				...x,
+				value: ""
+			}
+		})
+		setDisplayColumns(final)
+	}
+
+	const getDataType = (type) => {
+
+		if([ "INT64","FLOAT64"].includes(type)) return "number";
+		if(type == "STRING") return "text";
+	}
+
+	const getClientList = async () => {
+		let resp = await fetchData(`SELECT * FROM client_entity_info_v2 WHERE agency_id = ${neonUser.agency_id} ORDER BY id ASC`,"/neon-query")
+
+		console.log({getClientList: {resp}})
+
+		setClientList(resp)
+	}
+
+
+
 	return (
 		<AppContext.Provider value={{
+			cols,
 			selectedId, setSelectedId,
 			fetchData,
 			getKeys,
@@ -91,7 +208,18 @@ let AppContextProvider = ({children}) => {
 			getIds,
 			ids, setIds,
 			neonUser, setNeonUser,
-			getNeonUser
+			getNeonUser,
+			marketplaceList, setMarketplaceList,
+			getMarketPlace,
+			filterIds,
+			getList,
+			getRoleView,
+			getColumns,
+			columns, setColumns,
+			displayColumns, setDisplayColumns,
+			getDataType,
+			getClientList,
+			clientlist, setClientList,
 			
 		}}>
 

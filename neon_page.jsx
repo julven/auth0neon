@@ -1,6 +1,22 @@
 const NeonPage = () => {
 
-	const { selectedId, setSelectedId, fetchData, getKeys,list, setList, getIds,  ids, setIds, neonUser} = useContext(AppContext)
+	const {
+	 selectedId, 
+	 setSelectedId, 
+	fetchData,
+	 getKeys,
+	 list,setList, 
+	 getIds, 
+	 ids, 
+	 setIds, 
+	neonUser, 
+	marketplaceList, 
+	getMarketPlace,
+	setMarketplaceList,
+	filterIds,
+	getList,
+	getRoleView
+} = useContext(AppContext)
 
 	const {id} = useParams()
 	const navigate = useNavigate()
@@ -9,52 +25,11 @@ const NeonPage = () => {
 
 	
 	const [loading, setLoading] = useState(false)
-	const [marketplaceList, setMarketplaceList] =useState([])
+
 	const [agencyList, setAgencyList] = useState([])
 
 
-	const getRoleView = () => {
 
-		return ["admin","owner"].includes(neonUser.role) 
-	}
-	
-
-	const getList = async () => {
-	
-		if(neonUser.role == "normal" && neonUser.entity_id != Number(id)) return;
-
-		let addQuery = neonUser.agency_id ? `WHERE agency_id = ${neonUser.agency_id} AND id = ${Number(id)}` : ''
-		
-		let resp = await fetchData("SELECT * FROM client_entity_info_v2 "+addQuery, '/neon-query')
-
-		
-		console.log({getList: {neonUser, resp}}	)
-
-		// if((neonUser.role == "admin") || (neonUser.role == "normal" && neonUser.entity_id == Number(id))) {
-		if( getRoleView() || (neonUser.role == "normal" && neonUser.entity_id == Number(id))) {
-			setList(resp);
-
-			setSelectedId(id)
-		}
-		
-		
-
-		return
-		
-	}
-
-	
-
-	const getMarketPlace = async () => {
-
-		let resp = await fetchData("SELECT * FROM marketplace_info","/neon-market")
-
-		console.log({getMarketPlace: {resp}})
-
-		setMarketplaceList(resp)	
-
-		return
-	}
 
 	const getAgencyList = async () => {
 
@@ -78,18 +53,6 @@ const NeonPage = () => {
 		return id
 	}
 
-	const filterIds = async () => {
-
-		let resp = await fetchData(`SELECT DISTINCT(id) AS id FROM client_entity_info_v2 WHERE agency_id = ${neonUser.agency_id}`,"/neon-query")
-
-		console.log({filterIds: {resp}})
-
-		resp = resp.map( x => x.id)
-
-
-
-		setIds(resp)
-	}
 
 
 
@@ -115,19 +78,24 @@ const NeonPage = () => {
 
 	useEffect(() => {
 		console.log({id, neonUser})
-		 if(id && neonUser.role) getList();
+		 if(id && neonUser.role) {
+		 	getList(id);
+		 	
+		 } 
 		
 	}, [id, neonUser])
 
 	useEffect(() => {
+		console.log({neonUser})
 		if(neonUser.role == "normal") {
-			console.log({neonUser})
+			
 			navigate(`/${neonUser.entity_id}`)
 
 		}
 		if(neonUser.role == "owner") {
 			filterIds()
 		}
+
 	}, [neonUser])
 	
 

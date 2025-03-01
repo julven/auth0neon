@@ -2,6 +2,7 @@ const BigQuery = () => {
 
 
 	const { 
+		cols,
 		selectedId, 
 		fetchData, 
 		getKeys,
@@ -17,6 +18,9 @@ const BigQuery = () => {
 	const [selectedColumns, setSelectedColumns] = useState([])
 	const [columns, setColumns] = useState([])
 
+	const [loaded, setLoaded] = useState(false)
+
+
 
 	const resetPage = () => {
 		setDataList([])
@@ -27,12 +31,24 @@ const BigQuery = () => {
 
 	const getListCount = async () => {
 		
-		let sql = `SELECT COUNT(*) as count  FROM bispoke-sidekick.product_info.product_information_unique WHERE client_id = ${selectedId}`
+		// let sql = `SELECT COUNT(*) as count  FROM bispoke-sidekick.product_info.product_information_unique WHERE client_id = ${selectedId}`
+		let sql = `
+			SELECT COUNT(*) AS count FROM
+			(
+			SELECT ${cols.join(",")} FROM 
+			bispoke-sidekick.product_info.product_information_unique 
+			WHERE client_id = ${selectedId}
+			UNION ALL
+			SELECT ${cols.join(",")} FROM 
+			bispoke-sidekick.product_info.product_adds_edits_deletes 
+			WHERE client_id = ${selectedId}
+			)
 
+		`
 		let resp = await fetchData(sql, "/bigquery-sql")
 		let total = Math.ceil(resp[0].count / pageLimit)
 		console.log({getListCount: {resp}})
-		// setCount(resp[0].count)
+		setCount(resp[0].count)
 		setPages(total)	
 		
 		
@@ -41,22 +57,93 @@ const BigQuery = () => {
 		return
 	}
 
+	const getEditedList = async () => {
+
+		let sql = `
+			SELECT ${cols.join(",")} 
+			FROM bispoke-sidekick.product_info.product_adds_edits_deletes 
+			WHERE IS_ADD_EDIT_DELETE = 'EDIT'
+		`
+
+		let resp = await fetchData(sql, "/bigquery-sql")
+
+		console.log({getEditedList: {resp}})
+
+		
+	}
+
+	const replaceProductInfo = () => {
+		// console.log({replaceProductInfo: {dataList, editedList}})
+		let newList = dataList.map( x => {
+
+			let edited = editedList.map( xx => xx.record_id)
+
+			if(edited.includes(x.record_id)) return editedList.filter(xx => xx.record_id == x.record_id)[0];
+			else return x
+		})
+
+		console.log({replaceProductInfo: {newList}})
+		return newList
+		// setDataList(newList)
+
+	}
+
 	const getDataList = async () => {
+		
 		setDataList([])
 		
-		console.log("getDataList "+ (Math.random() + 1).toString(36).substring(7))
+		console.log("getDataList ")
 		
+		let sql1 = `
+			SELECT ${cols.join(",")} 
+			FROM bispoke-sidekick.product_info.product_adds_edits_deletes 
+			WHERE IS_ADD_EDIT_DELETE = 'EDIT'
+		`
 
-		sql = `SELECT *  FROM bispoke-sidekick.product_info.product_information_unique WHERE client_id = ${selectedId} LIMIT ${pageLimit} OFFSET ${pageLimit * currentPage}`
+		let editedList = await fetchData(sql1, "/bigquery-sql")
+
 		
-		resp = await fetchData(sql, "/bigquery-sql")	
+		let sql2 = `
+			SELECT* FROM 
+				(
+					SELECT 
+						${cols.join(",")}
+						FROM bispoke-sidekick.product_info.product_adds_edits_deletes 
+						WHERE client_id = ${selectedId}
+						AND IS_ADD_EDIT_DELETE = 'ADD'
+					UNION ALL
+					SELECT 
+						${cols.join(",")} 
+						FROM bispoke-sidekick.product_info.product_information_unique 
+						WHERE client_id = ${selectedId}
+				) 
+			LIMIT ${pageLimit} OFFSET ${pageLimit * currentPage}
+		`
+		let list  = await fetchData(sql2, "/bigquery-sql")	
 
-		console.log({getDataList: {resp}})
+		// setDataList(list)
+		
+		console.log({getDataList: {list, editedList}})
 
-		setDataList(resp)
-	
+		if(editedList.length > 0) {
+			list = list.map( x => {
+
+				let edited = editedList.map( xx => xx.record_id)
+
+				if(edited.includes(x.record_id)) return editedList.filter(xx => xx.record_id == x.record_id)[0];
+				else return x
+			})
+
+			console.log({getDataList: {list}})
+		}
+
+		setDataList(list)
+		setLoaded(true)
+
 		return
 	}
+
+
 
 	const selectedColumnsHandler = (col) => {
 		// console.log({selectedColumnsHandler: {col}})
@@ -69,13 +156,17 @@ const BigQuery = () => {
 		}
 	}
 
+
+
 	useEffect(() => {
 		// if(list.length > 0) {
 		if(selectedId >= 0) {
 			;(async () => {
 				resetPage()
+				
 	 			await getListCount()
 		 		await getDataList()
+
 		 		
 		 	})()
 		}
@@ -83,8 +174,8 @@ const BigQuery = () => {
 	}, [selectedId])
 
 	useEffect(() => {
-		
-		if(selectedId >= 0)  getDataList()
+		console.log({currentPage})
+		if(loaded)  getDataList()
 	}, [currentPage])
 
 	useEffect(() => {
@@ -92,23 +183,31 @@ const BigQuery = () => {
 		// console.log(columns)
 	}, [columns])
 
-	// useEffect(() => {
-
-	// 	console.log({selectedColumns})
-	// }, [selectedColumns])
 
 	useEffect(() => {
-		if(dataList.length > 0 && columns.length == 0) setColumns(Object.keys(dataList[0]))
+		if(dataList.length > 0 && columns.length == 0) {
+			
+			setColumns(Object.keys(dataList[0]))
+		}
+
+		console.log({dataList})
+
 	}, [dataList])
+
+
+
+
 
 	return(
 		<div>
 			<p>
 				big query <br/>
-				{/*showing {count} result(s)*/}
+				showing {count} result(s)<br/>
+				<Link to="/add-product">add product</Link>
 			</p>
 
 			<p>column list</p>
+			
 			<div>
 			{columns.map( (x, i) => 
 				<span key={i}>
@@ -134,7 +233,9 @@ const BigQuery = () => {
 							))
 
 							}
+							<th></th>
 						</tr>
+					
 					</thead>
 					<tbody>
 						{dataList.map( (x, i) => (
@@ -146,12 +247,15 @@ const BigQuery = () => {
 							))
 
 							}
-
+							<td>
+								<Link to={`/edit-product/${x.record_id}`}>edit</Link>
+							</td>
 						</tr>
 
 						))
 
 						}
+						
 					</tbody>
 				</table>
 				:
