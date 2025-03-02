@@ -1,4 +1,8 @@
-const live = true
+
+
+const live = window.location.href.includes('localhost') ? false : true  
+
+console.log({live})
 
 const baseUrl = live ? 
 	'https://julven.github.io/auth0neon' 

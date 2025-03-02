@@ -102,6 +102,18 @@ const BigQuery = () => {
 
 		let editedList = await fetchData(sql1, "/bigquery-sql")
 
+		let sql3 = `
+			SELECT CAST(record_id AS STRING) as record_id
+			FROM bispoke-sidekick.product_info.product_adds_edits_deletes
+			WHERE IS_ADD_EDIT_DELETE = 'DELETE'
+		`
+
+		let deleteList = await fetchData(sql3, "/bigquery-sql")
+
+		deleteList = deleteList.map(x => x.record_id)
+
+		console.log({getDataList: {deleteList, sql3}})
+
 		
 		let sql2 = `
 			SELECT* FROM 
@@ -111,11 +123,13 @@ const BigQuery = () => {
 						FROM bispoke-sidekick.product_info.product_adds_edits_deletes 
 						WHERE client_id = ${selectedId}
 						AND IS_ADD_EDIT_DELETE = 'ADD'
+						${deleteList.length > 0 ? `AND record_id NOT IN (${deleteList.join(",")})`: ""}
 					UNION ALL
 					SELECT 
 						${cols.join(",")} 
 						FROM bispoke-sidekick.product_info.product_information_unique 
 						WHERE client_id = ${selectedId}
+						${deleteList.length > 0 ? `AND record_id NOT IN (${deleteList.join(",")})`: ""}
 				) 
 			LIMIT ${pageLimit} OFFSET ${pageLimit * currentPage}
 		`
@@ -248,7 +262,11 @@ const BigQuery = () => {
 
 							}
 							<td>
-								<Link to={`/edit-product/${x.record_id}`}>edit</Link>
+								<div>
+									<span><Link to={`/edit-product/${x.record_id}`}>edit</Link></span>
+									&nbsp;
+									<span><BigQueryDelete product={x} getDataList={getDataList} setLoaded={setLoaded}/></span>
+								</div>
 							</td>
 						</tr>
 

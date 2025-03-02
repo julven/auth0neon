@@ -198,13 +198,13 @@ const Account = () => {
 
 				{neonUser.agency_name ? 
 				<>
-				brand_owned: {neonUser.agency_name} <br/>
-				brand_id: {neonUser.agency_id} <br/>
+				agency: {neonUser.agency_name} <br/>
+				agency id: {neonUser.agency_id} <br/>
 				</>
 				:
 				loaded ?
 				<>
-				create brand: 
+				create agency: 
 				<input value={agencyName} type="text" onChange={e => setAgencyName(e.target.value)}/> 
 				&nbsp;
 				<button onClick={createBrand}>create</button>
