@@ -15,7 +15,8 @@ const NeonPage = () => {
 	setMarketplaceList,
 	filterIds,
 	getList,
-	getRoleView
+	getRoleView,
+	agencyList, setAgencyList
 } = useContext(AppContext)
 
 	const {id} = useParams()
@@ -26,7 +27,7 @@ const NeonPage = () => {
 	
 	const [loading, setLoading] = useState(false)
 
-	const [agencyList, setAgencyList] = useState([])
+	// const [agencyList, setAgencyList] = useState([])
 
 
 

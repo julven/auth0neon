@@ -1,10 +1,215 @@
 const UsersEdit = () => {
 
+	const { id } = useParams()
+	const navigate = useNavigate()
 
+
+	const {
+		fetchData,
+		getUserInfo,
+		userInfo, setUserInfo,
+		neonUser,
+		agencyList, setAgencyList,
+		ids,
+		filterIds,
+		getRoles,
+		roles, setRoles
+	} = useContext(AppContext)
+
+
+	// const [roles, setRoles] = useState([])
+	const [ user, setUser] = useState({})
+	const [userEntities, setUserEntities] = useState([])
+	const [editUserEntities, setEditUserEntities] = useState(false)
+	const [ selectedEntity, setSelectedEntity] = useState("")
+	const [selectedRemoveEntities, setSelectedRemoveEntities] = useState([])
+
+	// const getRoles = async () => {
+
+	// 	let resp = await fetchData("SELECT unnest(enum_range(NULL::roles))", "/neon-query")
+
+		
+	// 	resp = resp.map( x=> x.unnest)
+	// 	console.log({getRoles: {resp}})
+
+	// 	setRoles(resp.filter( x=> !['admin','owner'].includes(x)))
+	// 	return
+	// }
+
+	const getUserEntities = async () => {
+		let sql = `
+			SELECT * FROM users_entity_id_list WHERE user_id = '${user.user_id}'
+
+		`
+
+		let resp = await fetchData(sql, "/neon-query")
+
+		console.log({getUserEntities: {resp}})
+
+		setUserEntities(resp)
+		return
+	}
+
+	const addUserEntity = async () => {
+		if(selectedEntity == "") return
+		let sql = `
+			INSERT INTO users_entity_id_list (user_id, entity_id)
+			VALUES
+			('${user.user_id}',${selectedEntity})	
+		`
+
+		let resp = await fetchData(sql, "/neon-query")
+
+		console.log({addUserEntity: {resp}})
+
+		await getUserEntities()
+	
+		setSelectedEntity("")
+		return 
+	}
+
+
+	const userChangeHandler = (value, field) => {
+		setUser({
+			...user,
+			[field] : value
+		})
+	}
+
+
+	const removeUserEntities = async () => {
+
+		if(selectedRemoveEntities.length == 0) return;
+
+		let sql = `
+
+			DELETE 
+			FROM users_entity_id_list 
+			WHERE user_id = '${user.user_id}' 
+			AND entity_id IN (${selectedRemoveEntities.map( x => x.entity_id).join(",")})
+		`
+
+		
+
+		let resp = await fetchData(sql, "/neon-query")
+
+		console.log({removeUserEntities: {resp}})
+
+		getUserEntities()
+		setSelectedRemoveEntities([])
+		setEditUserEntities(false)
+
+		return
+	}
+
+	const updateUserInfo = async (field) => {
+		if(user[field] == "") return;
+
+		let sql = `
+			UPDATE auth0_user SET ${field} = '${user[field]}' WHERE user_id = '${user.user_id}'
+		`
+
+		console.log({updateUserInfo: {sql, field, value: user[field]}})
+
+		let resp = await fetchData(sql, "/neon-query")
+
+
+
+		return
+	}
+
+	const goBack = (e) => {
+		e.preventDefault()
+		navigate(-1)
+	}
+
+
+	useEffect(() => {
+		getRoles()
+		if(!("id" in userInfo)) getUserInfo(id) 
+		
+	},[])
+
+	useEffect(() => {
+		if(ids.length== 0 && ("agency_id" in neonUser)) filterIds()
+		console.log({ids, neonUser})
+	}, [ids, neonUser])
+
+	useEffect(() => {
+		if(("id" in userInfo) && roles.length > 0) {
+			setUser({...userInfo})
+		}
+	}, [userInfo, roles])
+
+	useEffect(() => {
+		if("user_id" in neonUser) getUserEntities()
+	}, [neonUser,])
+
+	useEffect(() => {
+		console.log({selectedRemoveEntities})
+	}, [selectedRemoveEntities])
 
 	return(
 		<div>
-			<p>users edit</p>
+			<p>
+			users edit <br/>
+			<a href="#" onClick={goBack}>back</a>
+			</p>
+			
+			
+	
+			<p>email: <input readOnly type="email" value={user.email || ""} onChange={e => userChangeHandler(e.target.value, "email")}/> 
+			
+			</p>
+			<p>first name: <input type="text" value={user.first_name || ""} onChange={e => userChangeHandler(e.target.value, "first_name")}/> 
+			&nbsp;<button onClick={() => updateUserInfo('first_name')}>update</button>
+			</p>
+			<p>first name: <input type="text" value={user.last_name || ""} onChange={e => userChangeHandler(e.target.value, "last_name")}/>  
+			&nbsp;<button onClick={() => updateUserInfo('last_name')}>update</button>
+			</p>
+			<p>role: 
+			<span>
+				<select value={user.role || ""} onChange={e => userChangeHandler(e.target.value, "role")}>
+					<option value="">-select-</option>
+					{roles.map( x => (
+					<option key={x} value={x}>{x}</option>
+					))}
+				</select>
+				&nbsp;<button onClick={() => updateUserInfo('role')}>update</button>
+			</span></p>
+			entity id(s): 
+			{editUserEntities ?
+			<div>
+				{userEntities.map( x => (
+					<span key={x.id}>
+						<input type="checkbox" name="user-entities" onChange={() => setSelectedRemoveEntities([...selectedRemoveEntities,x])}/>&nbsp;{x.entity_id}
+					</span>
+				))}
+				<br/>
+				&nbsp;<button onClick={removeUserEntities}>remove</button>
+				&nbsp;<button onClick={() => setEditUserEntities(false)}>cancel</button>
+			</div>
+			:
+			<div>
+				{userEntities.map( x => x.entity_id).join(", ")}
+				&nbsp;<button onClick={() => setEditUserEntities(true)}>edit</button>
+			</div>
+			}
+			
+			
+			
+			<br/>
+			<select value={selectedEntity} onChange={e => setSelectedEntity(e.target.value)}>
+				<option value="">-select-</option>
+				{ids.filter( x => !userEntities.map(x => x.entity_id).includes(x)).map( x => (
+				<option key={x} value={x}>{x}</option>
+				))}
+			</select>
+			<button onClick={addUserEntity}>add</button>
+			
+
+
+			
 			
 		</div>
 	)

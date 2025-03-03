@@ -1,5 +1,7 @@
 let AppContextProvider = ({children}) => {
 
+
+
 	const [cols] = useState( [
 		"CAST(record_id as STRING) as record_id",
 		"marketplace_id",
@@ -39,6 +41,9 @@ let AppContextProvider = ({children}) => {
 	const [columns, setColumns] = useState([])
 	const [displayColumns, setDisplayColumns] = useState([])
 	const [clientlist, setClientList] = useState([])
+	const [userInfo, setUserInfo] = useState({})
+	const [agencyList, setAgencyList] = useState([])
+	const [roles, setRoles] = useState([])
 
 	const fetchData = async (query,endpoint) => {
 		let headerData = new Headers()
@@ -188,6 +193,27 @@ let AppContextProvider = ({children}) => {
 		setClientList(resp)
 	}
 
+	const getUserInfo = async (id) => {
+
+		let resp = await fetchData(`SELECT * FROM auth0_user WHERE id = ${id}`, "/neon-query");
+
+		console.log({getUserInfo: {resp}})
+
+		setUserInfo(resp[0])
+	}
+
+	const getRoles = async () => {
+
+		let resp = await fetchData("SELECT unnest(enum_range(NULL::roles))", "/neon-query")
+
+		
+		resp = resp.map( x=> x.unnest)
+		console.log({getRoles: {resp}})
+
+		setRoles(resp.filter( x=> !['admin','owner'].includes(x)))
+		return
+	}
+
 
 
 	return (
@@ -220,6 +246,11 @@ let AppContextProvider = ({children}) => {
 			getDataType,
 			getClientList,
 			clientlist, setClientList,
+			getUserInfo,
+			userInfo, setUserInfo,
+			agencyList, setAgencyList,
+			getRoles,
+			roles, setRoles,
 			
 		}}>
 

@@ -1,6 +1,10 @@
 const UsersForm = ({mode, submit, linker, setLinker}) => {
 
-	const { fetchData, ids, authUser } = useContext(AppContext)
+	const { 
+		fetchData, 
+		ids, 
+		authUser,
+	 } = useContext(AppContext)
 
 	const [roles, setRoles] = useState([])
 	const [selectedRole, setSelectedRole] = useState("")
@@ -61,9 +65,12 @@ const UsersForm = ({mode, submit, linker, setLinker}) => {
 		})
 	}
 
+
+
 	useEffect(() => {
 		getRoles()
 		console.log({mode})
+	
 	}, [])
 
 	useEffect(() => {
