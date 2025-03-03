@@ -98,7 +98,8 @@ const UsersAdd = () => {
 			
 			if(err) {
 				console.log({registerUserHandler: {err}})
-				setGeneralMessage(err.description)
+				if(err.description)setGeneralMessage(err.description)
+				if(err.description.rules)setGeneralMessage(err.description.rules.map(x => x.message).join("\n"))
 				return 
 
 			} 
