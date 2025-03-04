@@ -48,12 +48,24 @@ let AppContextProvider = ({children}) => {
 	const fetchData = async (query,endpoint) => {
 		let headerData = new Headers()
 		headerData.append("Content-Type", "application/json");
+		let data = null
+		try {
+			 data = await fetch(`${apiUrl}${endpoint}`, {
+				method:"POST",
+				headers: headerData,
+				body: JSON.stringify({query})
+			})
+		}
+		catch(err) {
+			console.log({ERROR: {apiUrl, endpoint, query, err}})
+			return false
+		}
 
-		let data = await fetch(`${apiUrl}${endpoint}`, {
-			method:"POST",
-			headers: headerData,
-			body: JSON.stringify({query})
-		})
+		// let data = await fetch(`${apiUrl}${endpoint}`, {
+		// 	method:"POST",
+		// 	headers: headerData,
+		// 	body: JSON.stringify({query})
+		// })
 
 		if(!data.ok) {
 			console.log({fetchData: {err: "ERROR!"}})
@@ -86,9 +98,16 @@ let AppContextProvider = ({children}) => {
 
 	const filterIds = async () => {
 
-		
+		let sql = `SELECT DISTINCT(id) AS id FROM client_entity_info_v2`
 
-		let resp = await fetchData(`SELECT DISTINCT(id) AS id FROM client_entity_info_v2 WHERE agency_id = ${neonUser.agency_id} ORDER BY id` ,"/neon-query")
+		if(neonUser.role == 'owner') sql = `
+			SELECT DISTINCT(id) AS id FROM client_entity_info_v2 WHERE agency_id = ${neonUser.agency_id} ORDER BY id
+		`
+		if(["normal","editor"].includes(neonUser.role)) sql = `
+			SELECT DISTINCT(id) FROM client_entity_info_v2 WHERE id IN (SELECT entity_id FROM users_entity_id_list WHERE user_id = '${neonUser.user_id}') ORDER BY id
+		`
+
+		let resp = await fetchData( sql,"/neon-query")
 
 		console.log({filterIds: {resp}})
 
@@ -128,29 +147,38 @@ let AppContextProvider = ({children}) => {
 
 	const getRoleView = () => {
 
-		return ["admin","owner"].includes(neonUser.role) 
+		return ["admin","owner","editor"].includes(neonUser.role) 
 	}
 
 	const getList = async (id) => {
 
-		console.log({filterIds: {id}})
-	
-		if(neonUser.role == "normal" && neonUser.entity_id != Number(id)) return;
+		// console.log({getList: {id, neonUser}})
+		// if(!neonUser.user_id) return;
+		// if(neonUser.role == "normal" && neonUser.entity_id != Number(id)) return;
 
-		let addQuery = neonUser.agency_id ? `WHERE agency_id = ${neonUser.agency_id} AND id = ${Number(id)}` : ''
+
+		// let addQuery = neonUser.agency_id ? `WHERE agency_id = ${neonUser.agency_id} AND id = ${Number(id)}` : ''
+		let addQuery = neonUser.role == 'owner'  ? 
+		`WHERE agency_id = ${neonUser.agency_id} AND id = ${Number(id)}` 
+		: 
+		["normal","editor"].includes(neonUser.role) ?
+		`WHERE id = ${Number(id)}` 
+		:
+		''
 		
 		let resp = await fetchData("SELECT * FROM client_entity_info_v2 "+addQuery, '/neon-query')
 
 		
-		console.log({getList: {neonUser, resp}}	)
+		console.log({getList: {neonUser, resp, id}}	)
 
 		// if((neonUser.role == "admin") || (neonUser.role == "normal" && neonUser.entity_id == Number(id))) {
-		if( getRoleView() || (neonUser.role == "normal" && neonUser.entity_id == Number(id))) {
-			setList(resp);
+		// if( getRoleView() || (neonUser.role == "normal" && neonUser.entity_id == Number(id))) {
+		// 	setList(resp);
 
-			setSelectedId(id)
-		}
-		
+		// 	setSelectedId(id)
+		// }
+		setSelectedId(id)
+		setList(resp);
 		
 
 		return
@@ -214,6 +242,78 @@ let AppContextProvider = ({children}) => {
 		return
 	}
 
+	const createProducModifyLog = async (IS_ADD_EDIT_DELETE, marketPlace) => {
+
+
+
+		console.log({createProducModifyLog: {IS_ADD_EDIT_DELETE, marketPlace}})
+		let colArr = displayColumns.map( x => x.column_name)
+		let max= 999999999999, min = 100000000000
+		let sql = ''
+
+		if(IS_ADD_EDIT_DELETE == 'DELETE') {
+			sql = `
+			INSERT INTO bispoke-sidekick.product_info.product_modify_logs 
+			(record_id, IS_ADD_EDIT_DELETE, BY_USER, TIMESTAMP)
+			VALUES
+			(
+			${marketPlace.record_id},
+			'DELETE',
+			'${token.idTokenPayload.sub}',
+			'${moment().format('YYYY-MM-DD HH:mm:ss')}')
+
+		`
+		}
+		else {
+			sql = `
+			INSERT INTO bispoke-sidekick.product_info.product_modify_logs
+			(record_id,
+			marketplace_id,
+			client_id,
+			child_asin,
+			client_title,
+			brand,
+			cogs,
+			client_name,
+			client_sku,
+			category,
+			subcategory,
+			attribute_1,
+			attribute_2,
+			marketplace,
+			IS_ADD_EDIT_DELETE,
+			BY_USER,
+			TIMESTAMP)
+
+			VALUES
+
+			(${Math.floor((Math.random())*(max-min+1))+min},
+			${marketPlace.id},
+			${displayColumns[colArr.indexOf('client_id')].value},
+			'${displayColumns[colArr.indexOf('child_asin')].value}',
+			'${displayColumns[colArr.indexOf('client_title')].value}',
+			'${displayColumns[colArr.indexOf('brand')].value}',
+			${displayColumns[colArr.indexOf('cogs')].value|| null},
+			'${displayColumns[colArr.indexOf('client_name')].value}',
+			'${displayColumns[colArr.indexOf('client_sku')].value}',
+			'${displayColumns[colArr.indexOf('category')].value}',
+			'${displayColumns[colArr.indexOf('subcategory')].value}',
+			'${displayColumns[colArr.indexOf('attribute_1')].value}',
+			'${displayColumns[colArr.indexOf('attribute_2')].value}',
+			'${marketPlace.country}',
+			'${IS_ADD_EDIT_DELETE}',
+			'${token.idTokenPayload.sub}',
+			'${moment().format('YYYY-MM-DD HH:mm:ss')}')`;
+
+		}
+		
+
+
+
+			let resp  = await fetchData(sql, "/bigquery-sql")
+
+	}
+
 
 
 	return (
@@ -251,7 +351,7 @@ let AppContextProvider = ({children}) => {
 			agencyList, setAgencyList,
 			getRoles,
 			roles, setRoles,
-			
+			createProducModifyLog
 		}}>
 
 			{children}

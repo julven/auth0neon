@@ -14,6 +14,7 @@ const Users = () => {
 		resp = resp.map( (x, i) => {
 			delete x['entity_id']
 			delete x['email_verified']
+			delete x['admin_creator']
 			return{
 				...x,
 				entities: entityList.filter( xx => xx.user_id == x.user_id).map(xx => xx.entity_id).join(", ")

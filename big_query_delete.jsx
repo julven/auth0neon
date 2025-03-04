@@ -1,7 +1,7 @@
 const BigQueryDelete = ({product, getDataList}) => {
 
 
-	const { token, fetchData } = useContext(AppContext)
+	const { token, fetchData ,createProducModifyLog } = useContext(AppContext)
 
 
 	const deleteProduct = async(e) => {
@@ -26,7 +26,7 @@ const BigQueryDelete = ({product, getDataList}) => {
 		
 
 		let resp = await fetchData(sql, "/bigquery-sql")
-
+		createProducModifyLog("DELETE", product)
 		console.log({deleteProduct: {resp}})
 
 		getDataList()

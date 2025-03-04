@@ -78,25 +78,26 @@ const NeonPage = () => {
 
 
 	useEffect(() => {
-		console.log({id, neonUser})
-		 if(id && neonUser.role) {
+		console.log({id, neonUser, ids, exists: ids.includes(Number(id))})
+		 if(ids.length > 0 && id && neonUser.role && ids.includes(Number(id))) {
 		 	getList(id);
 		 	
 		 } 
 		
-	}, [id, neonUser])
+	}, [id, neonUser, ids])
 
 	useEffect(() => {
-		console.log({neonUser})
-		if(neonUser.role == "normal") {
+		// console.log({neonUser})
+		// if(neonUser.role == "normal") {
 			
-			navigate(`/${neonUser.entity_id}`)
+		// 	navigate(`/${neonUser.entity_id}`)
 
-		}
-		if(neonUser.role == "owner") {
-			filterIds()
-		}
-
+		// }
+		// if(["owner","editor"].includes(neonUser.role) ) {
+		// 	// console.log("neon user info")
+		// 	filterIds()
+		// }
+		if(neonUser.role ) filterIds()
 	}, [neonUser])
 	
 
@@ -111,7 +112,7 @@ const NeonPage = () => {
 	return (
 		<div>
 			
-			{neonUser && getRoleView() ?
+			{neonUser.user_id ?
 			<div>
 				<p>list of entity id</p>
 				<div style={{maxWidth: '100%', overflowX: "scroll"}}>

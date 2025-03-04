@@ -202,7 +202,7 @@ const Account = () => {
 				agency id: {neonUser.agency_id} <br/>
 				</>
 				:
-				loaded ?
+				neonUser.role == 'owner' && loaded ?
 				<>
 				create agency: 
 				<input value={agencyName} type="text" onChange={e => setAgencyName(e.target.value)}/> 

@@ -18,6 +18,8 @@ const BigQueryAdd = () => {
 		getDataType,
 		getClientList,
 		clientlist, setClientList,
+		createProducModifyLog,
+
 	} = useContext(AppContext)
 	// const [columns, setColumns] = useState([])
 	// const [displayColumns, setDisplayColumns] = useState([])
@@ -150,8 +152,9 @@ const BigQueryAdd = () => {
 		`;
 		try {
 			let resp  = await fetchData(sql, "/bigquery-sql")
+			createProducModifyLog("ADD", marketPlace)
 
-			console.log({createProduct: {resp, sql}})
+			// console.log({createProduct: {resp, sql, marketPlace}})
 
 			let reset = [...displayColumns]
 
@@ -163,6 +166,7 @@ const BigQueryAdd = () => {
 			setMarketPlace({})
 			setDisplayColumns(reset)
 			setGeneralMessage("successfully added new product")
+
 
 
 		} catch (err) {

@@ -10,7 +10,8 @@ const BigQuery = () => {
 		pages, setPages,
 		count, setCount,
 		pageLimit,
-		list, setList
+		list, setList,
+		neonUser
 		
 	} = useContext(AppContext)
 	const [dataList, setDataList] = useState([])
@@ -217,7 +218,7 @@ const BigQuery = () => {
 			<p>
 				big query <br/>
 				showing {count} result(s)<br/>
-				<Link to="/add-product">add product</Link>
+				{["owner", "editor"].includes(neonUser.role) ? <Link to="/add-product">add product</Link> : null}
 			</p>
 
 			<p>column list</p>
@@ -247,7 +248,7 @@ const BigQuery = () => {
 							))
 
 							}
-							<th></th>
+							{["owner", "editor"].includes(neonUser.role) && <th></th>}
 						</tr>
 					
 					</thead>
@@ -261,6 +262,7 @@ const BigQuery = () => {
 							))
 
 							}
+							{["owner", "editor"].includes(neonUser.role) ?
 							<td>
 								<div>
 									<span><Link to={`/edit-product/${x.record_id}`}>edit</Link></span>
@@ -268,6 +270,11 @@ const BigQuery = () => {
 									<span><BigQueryDelete product={x} getDataList={getDataList} setLoaded={setLoaded}/></span>
 								</div>
 							</td>
+							:
+							null
+
+							}
+						
 						</tr>
 
 						))

@@ -23,6 +23,7 @@ const UsersEdit = () => {
 	const [editUserEntities, setEditUserEntities] = useState(false)
 	const [ selectedEntity, setSelectedEntity] = useState("")
 	const [selectedRemoveEntities, setSelectedRemoveEntities] = useState([])
+	const [ generalMessage, setGeneralMessage] = useState("")
 
 	// const getRoles = async () => {
 
@@ -51,7 +52,11 @@ const UsersEdit = () => {
 	}
 
 	const addUserEntity = async () => {
-		if(selectedEntity == "") return
+		setGeneralMessage("")
+		if(selectedEntity == "") {
+			setGeneralMessage(`no selected entity value.`)
+			return	
+		}
 		let sql = `
 			INSERT INTO users_entity_id_list (user_id, entity_id)
 			VALUES
@@ -65,6 +70,7 @@ const UsersEdit = () => {
 		await getUserEntities()
 	
 		setSelectedEntity("")
+		setGeneralMessage(`successfully added new entity value(s).`)
 		return 
 	}
 
@@ -78,8 +84,11 @@ const UsersEdit = () => {
 
 
 	const removeUserEntities = async () => {
-
-		if(selectedRemoveEntities.length == 0) return;
+		setGeneralMessage("")
+		if(selectedRemoveEntities.length == 0) {
+			setGeneralMessage(`no value(s) selected.`)
+			return;
+		} 
 
 		let sql = `
 
@@ -98,12 +107,17 @@ const UsersEdit = () => {
 		getUserEntities()
 		setSelectedRemoveEntities([])
 		setEditUserEntities(false)
+		setGeneralMessage(`successfully removed field value(s) '${selectedRemoveEntities.map( x => x.entity_id).join(",")}'`)
 
 		return
 	}
 
 	const updateUserInfo = async (field) => {
-		if(user[field] == "") return;
+		setGeneralMessage("")
+		if(user[field] == "") {
+			setGeneralMessage(`this field '${field}' must not be empty`)
+			return;	
+		}
 
 		let sql = `
 			UPDATE auth0_user SET ${field} = '${user[field]}' WHERE user_id = '${user.user_id}'
@@ -113,7 +127,7 @@ const UsersEdit = () => {
 
 		let resp = await fetchData(sql, "/neon-query")
 
-
+		setGeneralMessage(`successfully updated '${field}' field.`)
 
 		return
 	}
@@ -142,8 +156,8 @@ const UsersEdit = () => {
 	}, [userInfo, roles])
 
 	useEffect(() => {
-		if("user_id" in neonUser) getUserEntities()
-	}, [neonUser,])
+		if("user_id" in user) getUserEntities()
+	}, [user,])
 
 	useEffect(() => {
 		console.log({selectedRemoveEntities})
@@ -156,7 +170,7 @@ const UsersEdit = () => {
 			<a href="#" onClick={goBack}>back</a>
 			</p>
 			
-			
+			{generalMessage && <p>{generalMessage}</p>}
 	
 			<p>email: <input readOnly type="email" value={user.email || ""} onChange={e => userChangeHandler(e.target.value, "email")}/> 
 			
@@ -167,6 +181,7 @@ const UsersEdit = () => {
 			<p>first name: <input type="text" value={user.last_name || ""} onChange={e => userChangeHandler(e.target.value, "last_name")}/>  
 			&nbsp;<button onClick={() => updateUserInfo('last_name')}>update</button>
 			</p>
+			
 			<p>role: 
 			<span>
 				<select value={user.role || ""} onChange={e => userChangeHandler(e.target.value, "role")}>

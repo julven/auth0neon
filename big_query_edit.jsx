@@ -14,6 +14,7 @@ const BigQueryEdit = () => {
 		 getClientList,
 		 neonUser,
 		 clientlist, setClientList,
+		 createProducModifyLog,
 		 token,
 		} = useContext(AppContext)
 	const {id} = useParams()
@@ -211,6 +212,7 @@ const BigQueryEdit = () => {
 
 			let resp  = await fetchData(sql, "/bigquery-sql")
 
+			createProducModifyLog("EDIT", marketPlace)
 
 
 		}
@@ -242,6 +244,8 @@ const BigQueryEdit = () => {
 			// console.log({updateProduct: {sql}})
 
 			let resp = await fetchData(sql, "/bigquery-sql")
+
+			createProducModifyLog("EDIT", marketPlace)
 
 			
 		}
