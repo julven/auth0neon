@@ -22,7 +22,11 @@ const Navbar = () => {
 		{token && neonUser.email ? 
 			<div>
 				<span><Link to="/">Home</Link></span>&nbsp;
-				{["admin","owner"].includes(neonUser.role) && <>|&nbsp;<span><Link to="/users">Users</Link></span>&nbsp;</>}
+				{["admin","owner"].includes(neonUser.role) && 
+				<>
+				|&nbsp;<span><Link to="/users">Users</Link></span>&nbsp;
+				|&nbsp;<span><Link to="/brand">Brands</Link></span>&nbsp;
+				</>}
 				|&nbsp;<span><Link to="/account">Account</Link></span>&nbsp;
 				{/*|&nbsp;<span><Link to="/login">Login</Link></span>&nbsp;*/}
 			</div>
@@ -46,6 +50,10 @@ const Navbar = () => {
 						null
 						:
 						<>
+						<Route path="/brand" element={<Brand />}/>
+						<Route path="/brand-auth/:id" element={<BrandAuth />}/>
+						<Route path="/brand-add" element={<BrandAdd />}/>
+						<Route path="/brand-edit/:id" element={<BrandEdit />}/>
 						<Route path="/users" element={<Users />}/>
 						<Route path="/users-view/:id" element={<UsersView />}/>
 						<Route path="/users-add" element={<UsersAdd />}/>
