@@ -160,7 +160,7 @@ const BrandAuth = () => {
 			`companyName=${x.brand.brand}`,
 			`type=${x.brand.account_type == 'seller' ? 'seller_central' : x.brand.account_type == 'vendor' ? 'vendor_central': ''}`,
 	 		`agency=${x.agency.agency_name}`,
-	 		`agency_email=${x.agency.id}`,
+	 		`agency_email=${x.agency.agency_id}`,
 	 		`email=${x.brand_entity_id}`,
 		]
 
