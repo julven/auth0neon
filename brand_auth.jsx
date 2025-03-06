@@ -153,7 +153,7 @@ const BrandAuth = () => {
 
 	const ShowLinkOrStatus = ({x}) => {
 		let url = [
-			`https://authorize.biusers.com?`,
+			
 			`region=${x.marketplace.region}`,
 			`country=${x.marketplace.country}`,
 			`api_type=${`spapi`}`,
@@ -164,10 +164,12 @@ const BrandAuth = () => {
 	 		`email=${x.brand_entity_id}`,
 		]
 
-		
-
+		url = encodeURI(url.join("&"))
+		url = `https://authorize.biusers.com?`+url
 		return(
-			<a href={url.join("&")} title={url.join("&")} onClick={() => setShowUrl(url.join("&"))} target="_blank">authenticate</a>
+			
+				<a href={url} title={url} onClick={() => setShowUrl(url)} target="_blank">authenticate</a>
+			
 		)
 	}
 
@@ -186,9 +188,9 @@ const BrandAuth = () => {
 			<input type="date" value={selectedDate} onChange={e => setSelectedDate(e.target.value)}/>
 			{errorList.includes("selectedDate") ? <span>&nbsp; required</span> : null}
 			</p>
-
-			{showUrl && <p>{showUrl}</p>}
-
+			<div style={{maxWidth: '100%', overflowX: "scroll"}}>
+				{showUrl && <p>{showUrl}</p>}
+			</div>
 			<p>
 			marketplace: 
 			<select value={selectedMarketPlace} onChange={e => setSelectedMarketPlace(e.target.value)}>
