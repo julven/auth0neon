@@ -117,21 +117,70 @@ const BrandAuth = () => {
 
 		let sql2 = `SELECT * FROM agency WHERE user_owner_id = '${neonUser.user_id}'`
 
-		let resp = await fetchData(sql, "/neon-query")
-		let agency = await fetchData(sql2, "/neon-query")
+		let sql3 = `SELECT * FROM client_entity_info_v2 WHERE id = ${brand.brand_entity_id}`
+
+
+
+		// let resp = await fetchData(sql, "/neon-query")
+		// let agency = await fetchData(sql2, "/neon-query")
+
+		let data = await Promise.all([
+			fetchData(sql, "/neon-query"),
+			fetchData(sql2, "/neon-query"),
+			fetchData(sql3, "/neon-query"),
+		])
+
+		let resp = data[0], agency = data[1], company_list = data[2]
+
+		// console.log({getAuthorizedMarketplace: {data}})
+
+		// return
+
 
 		resp = resp.map( x => {
 			return {
 				...x,
 				brand,
 				marketplace: marketplaceList.filter( xx => xx.id == Number(x.marketplace_id))[0],
-				agency: agency[0]
+				agency: agency[0],
+			
+			}
+		})
+		resp = resp.map( x => {
+			return {
+				...x,
+				sellers:  company_list.filter(xx => xx.company_type.toLowerCase() == 'seller' && xx.marketplace_id == x.marketplace.marketplaceid),
+				vendors:  company_list.filter(xx => xx.company_type.toLowerCase()  == 'vendor'&& xx.marketplace_id == x.marketplace.marketplaceid)
 			}
 		})
 
-		console.log({getAuthorizedMarketplace: {resp, sql, marketplaceList}})
+		console.log({getAuthorizedMarketplace: {data, resp}})
 		setAuthorizedMarketplaceList(resp)
 		return
+	}
+
+	const getSellerId = async (x) => {
+
+		// console.log({getSellerId: { x}})
+
+		// return
+
+		let sql = `
+			SELECT * 
+			FROM client_profile_info 
+			WHERE client_id = ${x.brand.brand_entity_id} 
+			AND profile_type = '${x.brand.account_type == 'seller' ? 'seller_central': x.brand.account_type == 'vendor' ? 'vendor_central': x.brand.account_type}'
+			AND "countryCode" = '${x.marketplace.countrycode}'
+
+		`
+
+		let resp = await fetchData(sql, "/neon-market")
+
+
+
+		console.log({getSellerId: {resp}})
+
+		return resp.length > 0 ? resp[0] : {}
 	}
 
 	useEffect(() => {
@@ -151,27 +200,55 @@ const BrandAuth = () => {
 		console.log({selectedMarketPlace})
 	}, [selectedMarketPlace])
 
-	const ShowLinkOrStatus = ({x}) => {
+	const ShowLinkOrStatus =  ({x}) => {
+
+		const [auth, setAuth] = useState({})
+
+		useEffect(() => {
+			(async () => {
+				let resp = await getSellerId(x)
+				setAuth(resp)
+			})()
+			
+		}, [])
+
 		let url = [
 			
 			`region=${x.marketplace.region}`,
-			`country=${x.marketplace.country}`,
+			`country=${x.marketplace.regionCode.code}`,
 			`api_type=${`spapi`}`,
 			`companyName=${x.brand.brand}`,
 			`type=${x.brand.account_type == 'seller' ? 'seller_central' : x.brand.account_type == 'vendor' ? 'vendor_central': ''}`,
 	 		`agency=${x.agency.agency_name}`,
 	 		`agency_email=${x.agency.agency_id}`,
 	 		`email=${x.brand_entity_id}`,
+	 		`agency=${x.agency.agency_name}`
 		]
 
 		url = encodeURI(url.join("&"))
 		url = `https://authorize.biusers.com?`+url
+		if("id" in auth) 
 		return(
-			
-				<a href={url} title={url} onClick={() => setShowUrl(url)} target="_blank">authenticate</a>
+			<>
+				{auth.id && auth.active ? 	
+				"active"
+				:
+				'inactive'
+				
+				}
+			</>
+				
 			
 		)
+		else return <a href={url} title={url} onClick={() => setShowUrl(url)} target="_blank">authenticate</a>
+		
 	}
+
+
+
+	
+
+
 
 	return (
 		<div>
@@ -227,8 +304,8 @@ const BrandAuth = () => {
 
 							<td><ShowLinkOrStatus x={x}/></td>
 					
-							{brand.ads_management && brand.ads_management.includes('ppc') ? <td>test ppc</td>:null}
-							{brand.ads_management && brand.ads_management.includes('dsp') ? <td>test dsp</td>:null}
+							{brand.ads_management && brand.ads_management.includes('ppc') ? <td>{x.sellers.length > 0 ? "active": "inactive"}</td>:null}
+							{brand.ads_management && brand.ads_management.includes('dsp') ? <td>{x.vendors.length > 0 ? "active": "inactive"}</td>:null}
 							<td>
 								<div>
 									view 

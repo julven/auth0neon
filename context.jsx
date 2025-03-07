@@ -138,8 +138,31 @@ let AppContextProvider = ({children}) => {
 
 		let resp = await fetchData("SELECT * FROM marketplace_info","/neon-market")
 
-		console.log({getMarketPlace: {resp}})
+		const regionCode = [
+			{
+				region: "north america",
+				code: "NA"
+			},
+			{
+				region: "europe",
+				code: "EU"
+			},
+			{
+				region: "fareast",
+				code: "FA"
+			},
+		]
 
+		
+
+		resp = resp.map( x => {
+			return {
+				...x,
+				regionCode: regionCode.filter( xx => xx.region == x.region )[0]
+			}	
+		})
+
+		console.log({getMarketPlace: {resp}})
 		setMarketplaceList(resp)	
 
 		return
