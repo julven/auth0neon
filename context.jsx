@@ -45,6 +45,7 @@ let AppContextProvider = ({children}) => {
 	const [agencyList, setAgencyList] = useState([])
 	const [roles, setRoles] = useState([])
 
+
 	const fetchData = async (query,endpoint) => {
 		let headerData = new Headers()
 		headerData.append("Content-Type", "application/json");
@@ -337,6 +338,7 @@ let AppContextProvider = ({children}) => {
 
 	}
 
+
 	
 
 
@@ -376,7 +378,8 @@ let AppContextProvider = ({children}) => {
 			agencyList, setAgencyList,
 			getRoles,
 			roles, setRoles,
-			createProducModifyLog
+			createProducModifyLog,
+
 		}}>
 
 			{children}

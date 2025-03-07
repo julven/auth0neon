@@ -8,6 +8,7 @@ const BrandAuth = () => {
 		getMarketPlace,
 		marketplaceList, setMarketplaceList,
 
+
 	} = useContext(AppContext)
 
 	const [brand, setBrand] = useState({})
@@ -222,7 +223,7 @@ const BrandAuth = () => {
 	 		`agency=${x.agency.agency_name}`,
 	 		`agency_email=${x.agency.agency_id}`,
 	 		`email=${x.brand_entity_id}`,
-	 		`agency=${x.agency.agency_name}`
+	 		
 		]
 
 		url = encodeURI(url.join("&"))
@@ -308,7 +309,7 @@ const BrandAuth = () => {
 							{brand.ads_management && brand.ads_management.includes('dsp') ? <td>{x.vendors.length > 0 ? "active": "inactive"}</td>:null}
 							<td>
 								<div>
-									view 
+								<Link to={`/brand-auth-view/${x.id}`}>view</Link>
 								</div>
 							</td>
 						</tr>

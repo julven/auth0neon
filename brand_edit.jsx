@@ -14,13 +14,13 @@ const BrandEdit = () => {
 	const [errorList, setErrorList] = useState([])
 	const [generalMessage, setGeneralMessage] = useState("")
 
+	const [brandEntityId, setBrandEntityId] = useState("")
+
 	const goBack = (e) => {
 		e.preventDefault()
 
 		navigate(-1)
 	}
-
-
 
 	const adsManagementChangeHandler = (value) => {
 		let list = [...brand.ads_management|| []]
@@ -127,6 +127,45 @@ const BrandEdit = () => {
 		return
 	}
 
+	const updateEntityId = async () => {
+
+		setGeneralMessage("")
+
+		if(brand.brand_entity_id == "") {
+			setGeneralMessage("entity id must not be empty.");
+			return;
+		} 
+
+		let sql1 = `
+
+			UPDATE brand_marketplace 
+			SET brand_entity_id = ${brandEntityId} 
+			WHERE brand_entity_id = ${brand.brand_entity_id}
+
+		`
+
+		let sql2 = `
+			UPDATE brand 
+			SET brand_entity_id = ${brandEntityId} 
+			WHERE brand_entity_id = ${brand.brand_entity_id}
+		`
+
+		console.log({updateEntityId: {sql1}})
+
+		let resp1 = await fetchData(sql1, "/neon-query");
+		let resp2 = await fetchData(sql2, "/neon-query");
+
+		if(!resp1 || !resp2) {
+			setGeneralMessage("error! please try again")
+			return
+		}
+
+		setGeneralMessage("entity id successfully updated")
+
+		return
+
+	}
+
 	useEffect(() => {
 		if(neonUser.user_id && id && accountTypeList.length > 0) getBrand()
 	}, [neonUser, id, accountTypeList])
@@ -137,6 +176,7 @@ const BrandEdit = () => {
 
 	useEffect(() => {
 		// console.log({brand})
+		if(brand.brand_entity_id)setBrandEntityId(brand.brand_entity_id)
 	}, [brand])
 
 
@@ -147,7 +187,10 @@ const BrandEdit = () => {
 			<a href="#" onClick={goBack}>back</a>
 			{generalMessage && <p>{generalMessage}</p>}
 			<p>
-			entity id: {brand.brand_entity_id}<br/>
+			{/*entity id: {brand.brand_entity_id}<br/>*/}
+			entity id: <input type="number" value={brandEntityId} onChange={e => setBrandEntityId(e.target.value)}/>&nbsp;<button onClick={updateEntityId}>update</button><br/>
+			</p>
+			<p>
 			brand name: 
 			<input type="text" value={brand.brand || ''} onChange={e => brandChangeHandler('brand',e.target.value)}/>
 			&nbsp;{errorList.includes("brand") && 'required'}
