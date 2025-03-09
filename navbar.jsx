@@ -26,6 +26,7 @@ const Navbar = () => {
 				<>
 				|&nbsp;<span><Link to="/users">Users</Link></span>&nbsp;
 				|&nbsp;<span><Link to="/brand">Brands</Link></span>&nbsp;
+				|&nbsp;<span><Link to="/subscription">Subscription</Link></span>&nbsp;
 				</>}
 				|&nbsp;<span><Link to="/account">Account</Link></span>&nbsp;
 				{/*|&nbsp;<span><Link to="/login">Login</Link></span>&nbsp;*/}
@@ -50,6 +51,7 @@ const Navbar = () => {
 						null
 						:
 						<>
+						<Route path="/subscription" element={<Subscription />}/>
 						<Route path="/brand" element={<Brand />}/>
 						<Route path="/brand-auth/:id" element={<BrandAuth />}/>
 						<Route path="/brand-auth-view/:id" element={<BrandAuthView />}/>

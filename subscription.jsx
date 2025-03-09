@@ -1,0 +1,178 @@
+const Subscription = () => {
+
+	const {
+		fetchData,
+		neonUser, 
+		getNeonUser,
+	} = useContext(AppContext)
+
+	const navigate = useNavigate()
+
+	const [products, setProducts] = useState([])
+	const [range, setRange] = useState(0)
+	const [subscribed, setSubscribed] = useState([])
+
+
+	const getProducts = async () => {
+
+		let resp  = await fetchData(null, "/stripe-products")
+		console.log({getProducts:{resp}})
+
+		setProducts(resp.data.reverse())
+	}
+
+	const createStripeCustomerId = async () => {
+
+		console.log("create stripe customer id")
+
+		let resp = await fetch(`${apiUrl}/stripe-customer`, {
+			method: "POST",
+			headers: (() => {
+				const myHeaders = new Headers();
+				myHeaders.append("Content-Type", "application/json");
+				return myHeaders
+			})(),
+			body: JSON.stringify(neonUser)
+		})
+
+		resp = await resp.text()
+
+		console.log({createStripeCustomerId: {resp}})
+		getNeonUser()
+
+		return
+	}
+
+	const getSubscription = async () => {
+
+		let resp = await fetch(`${apiUrl}/stripe-get-subscription`, {
+			method: "POST",
+			headers: (() => {
+				const myHeaders = new Headers();
+				myHeaders.append("Content-Type", "application/json");
+				return myHeaders
+			})(),
+			body: JSON.stringify({
+				customer_id:neonUser.stripe_customer_id
+			})
+
+		})
+
+		resp = await resp.json()
+
+		console.log({getSubscription: {resp}})
+
+		if("error" in resp) return
+
+		setSubscribed(resp.data)
+	}
+
+	const createSubscription = async () => {
+		
+
+		let data = {
+			url: `${baseUrl}#/subscription`,
+			price: products[range].default_price,
+			customer_id: neonUser.stripe_customer_id
+		}
+		// console.log({createSubscription:{data}})
+		// return
+
+		let resp = await fetch(`${apiUrl}/stripe-subscription`, {
+			method: "POST",
+			headers: (() => {
+				const myHeaders = new Headers();
+				myHeaders.append("Content-Type", "application/json");
+				return myHeaders
+			})(),
+			body: JSON.stringify(data)
+		})
+
+		resp = await resp.json()
+
+		console.log({createSubscription: {resp}})
+
+		if(!("url" in resp)) {
+			console.log("error in subscription")
+			return
+		}
+		
+		window.location.href=resp.url;
+
+		return
+	}
+
+	const showProductName = (x, field) => {
+	
+		
+		let result = products.filter( xx => xx.id == x.plan.product)	
+		if(result.length == 0) return ""
+		console.log({showProductName:result})
+		return result[0][field]
+	
+	}
+
+	useEffect(() => {
+		getProducts()
+		getSubscription()
+	}, [])
+
+	useEffect(() => {
+		console.log({subscribed})
+	}, [subscribed])
+
+	useEffect(() => {
+		console.log(neonUser.stripe_customer_id)
+		if(neonUser.user_id && neonUser.stripe_customer_id == null) createStripeCustomerId()
+	}, [neonUser])
+
+
+	return (
+		<div>
+		{subscribed.length > 0 ?
+
+		<div>
+			<p>you have subscribed to the following plan</p>
+
+			{subscribed.map(x => (
+				<div key={x.id}>
+					<p>{showProductName(x,'name')}</p>	
+					<p>{showProductName(x,'description')}</p>	
+					<button>cancel subscription</button>
+				</div>
+
+
+			))
+
+			}
+
+		</div>
+
+		:
+		<div>
+			<p>subsciption</p>
+
+			<p>sele	ct subsciption by scrolling the slider based on anual revenue/sales</p>
+
+			<div>
+			  <input type="range" min={0} max={products.length - 1} value={range} onChange={e => setRange(e.target.value)}/>&nbsp;
+			  {products.length > 0 ?
+			  <p>
+			  {products[range].name}<br/>
+			  {products[range].description}
+
+			  </p>
+			  :
+				null
+			  }
+			  
+			  <button onClick={createSubscription}>subscribe</button>
+			</div>
+
+		</div>
+
+		}
+			
+		</div>
+	)
+}
