@@ -1,6 +1,6 @@
 const Users = () => {
 
-	const { fetchData, token, getKeys } = useContext(AppContext)
+	const { fetchData, token, getKeys, setUserInfo } = useContext(AppContext)
 	const [userList, setUserList] = useState([])
 	const [entityList, setEntityList] = useState([])
 
@@ -62,6 +62,7 @@ const Users = () => {
 	}
 
 	useEffect(() => {
+		setUserInfo([])
 		getUserEntities()
 	
 	}, [])
@@ -100,10 +101,14 @@ const Users = () => {
 										{x['active?'] ? "YES": "NO"}
 									</span>
 									:
+									xx == "entities" ? 
+									<span>
+									{x[xx].length > 0 ? x[xx] : "all entities"}
+									</span>
+									:
 									<span>
 									{x[xx]}
 									</span>
-
 									}
 								</td>
 							))

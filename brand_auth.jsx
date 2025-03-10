@@ -215,8 +215,8 @@ const BrandAuth = () => {
 
 		let url = [
 			
-			`region=${x.marketplace.region}`,
-			`country=${x.marketplace.regionCode.code}`,
+			`region=${x.marketplace.regionCode.code}`,
+			`country=${x.marketplace.countrycode }`,
 			`api_type=${`spapi`}`,
 			`companyName=${x.brand.brand}`,
 			`type=${x.brand.account_type == 'seller' ? 'seller_central' : x.brand.account_type == 'vendor' ? 'vendor_central': ''}`,

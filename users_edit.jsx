@@ -139,15 +139,15 @@ const UsersEdit = () => {
 
 
 	useEffect(() => {
-		getRoles()
+		if(roles.length == 0) getRoles();
 		if(!("id" in userInfo)) getUserInfo(id) 
 		
 	},[])
 
 	useEffect(() => {
-		if(ids.length== 0 && ("agency_id" in neonUser)) filterIds()
-		console.log({ids, neonUser})
-	}, [ids, neonUser])
+		if(neonUser.agency_id) filterIds()
+		
+	}, [ neonUser, userInfo])
 
 	useEffect(() => {
 		if(("id" in userInfo) && roles.length > 0) {
@@ -156,12 +156,13 @@ const UsersEdit = () => {
 	}, [userInfo, roles])
 
 	useEffect(() => {
-		if("user_id" in user) getUserEntities()
+		console.log({user})
+		if(user.user_id) getUserEntities()
 	}, [user,])
 
 	useEffect(() => {
-		console.log({selectedRemoveEntities})
-	}, [selectedRemoveEntities])
+		console.log({ids})
+	}, [ids])
 
 	return(
 		<div>
@@ -192,7 +193,7 @@ const UsersEdit = () => {
 				</select>
 				&nbsp;<button onClick={() => updateUserInfo('role')}>update</button>
 			</span></p>
-			entity id(s): 
+			entity id(s): &nbsp;
 			{editUserEntities ?
 			<div>
 				{userEntities.map( x => (
@@ -205,15 +206,19 @@ const UsersEdit = () => {
 				&nbsp;<button onClick={() => setEditUserEntities(false)}>cancel</button>
 			</div>
 			:
-			<div>
-				{userEntities.map( x => x.entity_id).join(", ")}
-				&nbsp;<button onClick={() => setEditUserEntities(true)}>edit</button>
-			</div>
+			<span>
+			{userEntities.length > 0 ? 
+			userEntities.map( x => x.entity_id).join(", ")
+			:
+			"all entities"
+			}
+			&nbsp;<button hidden={userEntities.length == 0 } onClick={() => setEditUserEntities(true)}>edit</button>
+			</span>
 			}
 			
 			
 			
-			<br/>
+			<br/><br/>
 			<select value={selectedEntity} onChange={e => setSelectedEntity(e.target.value)}>
 				<option value="">-select-</option>
 				{ids.filter( x => !userEntities.map(x => x.entity_id).includes(x)).map( x => (

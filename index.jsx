@@ -73,6 +73,11 @@ const Index = () => {
 		} 
 	}, [token])
 
+	
+	useEffect(() => {
+		console.log({neonUser})
+	},[neonUser])
+
 
 	return (
 		<div>

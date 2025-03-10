@@ -10,6 +10,7 @@ const UsersAdd = () => {
 		getRoles,
 		roles, setRoles,
 		userInfo,
+		getUserInfo,
 	} = useContext(AppContext)
 
 	const [user, setUser] = useState({
@@ -68,10 +69,10 @@ const UsersAdd = () => {
 				errors.push(x)
 			}
 		})
-		if(user.entities.length == 0) {
-			errors.push('entities')
-			valid = false
-		}
+		// if(user.entities.length == 0) {
+		// 	errors.push('entities')
+		// 	valid = false 
+		// }
 		setErrorList(errors)
 		if(!valid) {
 			setGeneralMessage("required fields must not be empty.")
@@ -124,13 +125,15 @@ const UsersAdd = () => {
 	}
 
 	useEffect(() => {
-		if(roles.length == 0) getRoles()
+		if(roles.length == 0) getRoles();
+
 	},[])
 
 	useEffect(() => {	
-		if(ids.length== 0 && ("agency_id" in neonUser)) filterIds()
-		console.log({ids, neonUser})
-	}, [ids, neonUser])
+	
+		if(neonUser.agency_id) filterIds()
+		console.log({neonUser})
+	}, [ neonUser, userInfo])
 
 	
 	useEffect(() => {
@@ -159,11 +162,15 @@ const UsersAdd = () => {
 
 			<div>
 			entity id(s): &nbsp;
-				{user.entities.map( x => (
-					<span key={x}>
-						<input type="checkbox" name="user-entities" onChange={() =>setRemoveSelectedEntities([...removeSelectedEntities, x])}/>&nbsp;{x}
-					</span>
-				))}
+				{user.entities.length > 0 ?
+				user.entities.map( x => (
+				<span key={x}>
+					<input type="checkbox" name="user-entities" onChange={() =>setRemoveSelectedEntities([...removeSelectedEntities, x])}/>&nbsp;{x}
+				</span>
+				))
+				:
+				<span>all entities</span>
+				}
 				<br/>
 				&nbsp;<button hidden={user.entities.length == 0} onClick={removeSelectedEntitiesHandler}>remove</button>
 				

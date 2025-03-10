@@ -99,6 +99,7 @@ let AppContextProvider = ({children}) => {
 
 	const filterIds = async () => {
 
+
 		let sql = `SELECT DISTINCT(id) AS id FROM client_entity_info_v2`
 
 		if(neonUser.role == 'owner') sql = `
@@ -110,11 +111,22 @@ let AppContextProvider = ({children}) => {
 
 		let resp = await fetchData( sql,"/neon-query")
 
-		console.log({filterIds: {resp}})
+
+		if(resp.length == 0 && ["normal","editor"].includes(neonUser.role)) {
+			console.log(`user is ${neonUser.role} and has no entity list`)
+			return
+			resp = await fetchData( `
+				SELECT DISTINCT(id) AS id FROM client_entity_info_v2 
+				WHERE agency_id = (
+				SELECT agency_id FROM agency 
+				WHERE user_owner_id = '${neonUser.user_id}') 
+				ORDER BY id
+			`,"/neon-query")
+		}
 
 		resp = resp.map( x => x.id)
 
-
+		console.log({filterIds: {resp, sql}})
 
 		setIds(resp)
 	}

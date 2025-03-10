@@ -101,9 +101,6 @@ const NeonPage = () => {
 	}, [neonUser])
 	
 
-	useEffect(() => {
-
-	},[neonUser])
 
 
 

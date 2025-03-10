@@ -44,6 +44,7 @@ const Subscription = () => {
 	}
 
 	const getSubscription = async () => {
+		setSubscribed([])
 
 		let resp = await fetch(`${apiUrl}/stripe-get-subscription`, {
 			method: "POST",
@@ -88,9 +89,21 @@ const Subscription = () => {
 			body: JSON.stringify(data)
 		})
 
-		resp = await resp.json()
+		if(!resp.ok) {
+			console.log("error in subscription")
+			return
+		}
+
+		resp = await resp.text()
 
 		console.log({createSubscription: {resp}})
+
+		try{
+			resp = JSON.parse(resp)
+		}catch(err) {
+			console.log("error in subscription", err)
+			return
+		}
 
 		if(!("url" in resp)) {
 			console.log("error in subscription")
@@ -98,6 +111,47 @@ const Subscription = () => {
 		}
 		
 		window.location.href=resp.url;
+
+		return
+	}
+
+
+	const cancelSubscription = async (x) => {
+
+		// console.log({cancelSubscription: {x}})
+
+		// return
+
+		let conf = confirm('cancel this subscription?')
+
+		if(!conf) return
+
+		let data = {
+			customer_id: x.id 
+		}
+		// console.log({createSubscription:{data}})
+		// return
+
+		let resp = await fetch(`${apiUrl}/stripe-cancel-subscription`, {
+			method: "POST",
+			headers: (() => {
+				const myHeaders = new Headers();
+				myHeaders.append("Content-Type", "application/json");
+				return myHeaders
+			})(),
+			body: JSON.stringify(data)
+		})
+
+		if(!resp.ok) {
+			console.log("error in cancel subscription")
+			return
+		}
+
+		resp = await resp.json()
+
+		console.log({cancelSubscription: {resp}})
+
+		getSubscription()
 
 		return
 	}
@@ -138,7 +192,7 @@ const Subscription = () => {
 				<div key={x.id}>
 					<p>{showProductName(x,'name')}</p>	
 					<p>{showProductName(x,'description')}</p>	
-					<button>cancel subscription</button>
+					<button onClick={() => cancelSubscription(x)}>cancel subscription</button>
 				</div>
 
 
@@ -152,7 +206,7 @@ const Subscription = () => {
 		<div>
 			<p>subsciption</p>
 
-			<p>sele	ct subsciption by scrolling the slider based on anual revenue/sales</p>
+			<p>select subsciption plan by scrolling the slider based on anual revenue/sales</p>
 
 			<div>
 			  <input type="range" min={0} max={products.length - 1} value={range} onChange={e => setRange(e.target.value)}/>&nbsp;

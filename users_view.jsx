@@ -15,6 +15,7 @@ const UsersView = () => {
 	}
 
 	const getUserEntities = async () => {
+		setEntityList([])
 		let sql = `
 			SELECT * FROM users_entity_id_list WHERE user_id = '${userInfo.user_id}'
 
@@ -28,11 +29,13 @@ const UsersView = () => {
 	}
 
 	useEffect(() => {
+		
 		getUserInfo(id)
 	}, [])
 
 	useEffect(() => {
-		getUserEntities()
+		// console.log({userInfo})
+		if(userInfo.user_id) getUserEntities()
 	}, [userInfo])
 
 	return(
@@ -45,7 +48,12 @@ const UsersView = () => {
 				first name: {userInfo.last_name} <br/>
 				role: {userInfo.role}<br/>
 			</p>
-			<p>entity id(s): {entityList.map( x => x.entity_id).join(", ")}</p>
+			<p>entity id(s): {
+				entityList.length > 0 ?
+				entityList.map( x => x.entity_id).join(", ")
+				:
+				"all entities"
+			}</p>
 			
 			<a href="#" onClick={goBack}>back</a>&nbsp;
 			<Link to={`/users-edit/${id}`}>edit</Link>
