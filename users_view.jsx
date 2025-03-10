@@ -48,7 +48,7 @@ const UsersView = () => {
 				first name: {userInfo.last_name} <br/>
 				role: {userInfo.role}<br/>
 			</p>
-			<p>entity id(s): {
+			<p>Only access these brands: {
 				entityList.length > 0 ?
 				entityList.map( x => x.entity_id).join(", ")
 				:
