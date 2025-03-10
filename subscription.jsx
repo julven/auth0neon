@@ -159,11 +159,49 @@ const Subscription = () => {
 	const showProductName = (x, field) => {
 	
 		
-		let result = products.filter( xx => xx.id == x.plan.product)	
+		let result = products.filter( xx => xx.id == x.plan.product)
+
 		if(result.length == 0) return ""
+
 		console.log({showProductName:result})
+
 		return result[0][field]
 	
+	}
+
+	const viewPaymentHistory = async (e) => {
+
+		console.log("view payment history")
+
+		e.preventDefault()
+
+		let resp = await fetch(`${apiUrl}/stripe-view-payment`, {
+			method: "POST",
+			headers: (() => {
+				const myHeaders = new Headers();
+				myHeaders.append("Content-Type", "application/json");
+				return myHeaders
+			})(),
+			body: JSON.stringify({	
+				customer: neonUser.stripe_customer_id,
+				return_url: baseUrl+"#/subscription"
+			})
+		})
+
+		if(!resp.ok) {
+			console.log("error in view payment history")
+			return
+		}
+
+		resp = await resp.json()
+
+		console.log({viewPaymentHistory: {resp}})
+
+		window.location.href=resp.url;
+
+		return
+
+
 	}
 
 	useEffect(() => {
@@ -226,7 +264,7 @@ const Subscription = () => {
 		</div>
 
 		}
-			
+			<a href="#" onClick={viewPaymentHistory}>payment history</a>
 		</div>
 	)
 }
