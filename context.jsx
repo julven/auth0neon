@@ -47,6 +47,7 @@ let AppContextProvider = ({children}) => {
 
 
 	const fetchData = async (query,endpoint) => {
+	
 		let headerData = new Headers()
 		headerData.append("Content-Type", "application/json");
 		let data = null
@@ -80,13 +81,14 @@ let AppContextProvider = ({children}) => {
 
 	}
 	const getKeys = (x) => {
+
 		let keyArr = Object.keys(x)
 		// console.log({getKeys: {keyArr}})
 		return keyArr
 	}
 
 	const getIds = async () => {
-
+		console.log({context: "getIds"})
 		let sql = `SELECT DISTINCT(id) FROM client_entity_info_v2  ORDER BY id`
 		
 		let resp = await fetchData(sql, "/neon-query")
@@ -99,6 +101,7 @@ let AppContextProvider = ({children}) => {
 
 	const filterIds = async () => {
 
+		console.log({context: "filterIds"})
 
 		let sql = `SELECT DISTINCT(id) AS id FROM client_entity_info_v2`
 
@@ -133,6 +136,8 @@ let AppContextProvider = ({children}) => {
 
 	const getNeonUser = async () => {
 
+		console.log({context: "getNeonUser"})
+
 		let resp = await fetchData(`SELECT * from auth0_user where user_id = '${token.idTokenPayload.sub}'`, "/neon-query")
 
 		let resp2 = await fetchData(`SELECT * from agency where user_owner_id = '${token.idTokenPayload.sub}'`,"/neon-query")
@@ -148,6 +153,8 @@ let AppContextProvider = ({children}) => {
 	}
 
 	const getMarketPlace = async () => {
+
+		console.log({context: "getMarketPlace"})
 
 		let resp = await fetchData("SELECT * FROM marketplace_info","/neon-market")
 
@@ -182,11 +189,14 @@ let AppContextProvider = ({children}) => {
 	}
 
 	const getRoleView = () => {
+		console.log({context: "getRoleView"})
 
 		return ["admin","owner","editor"].includes(neonUser.role) 
 	}
 
 	const getList = async (id) => {
+
+		console.log({context: "getList"})
 
 		// console.log({getList: {id, neonUser}})
 		// if(!neonUser.user_id) return;
@@ -222,7 +232,11 @@ let AppContextProvider = ({children}) => {
 	}
 
 	const getColumns = async () => {
-		console.log("getColumns")
+
+
+		console.log({context: "getColumns"})
+
+
 		let sql = "SELECT column_name,data_type FROM `bispoke-sidekick.product_info.INFORMATION_SCHEMA.COLUMNS` WhERE table_name = 'product_adds_edits_deletes'"
 		let resp = await fetchData( sql, "/bigquery-sql" )
 
@@ -245,6 +259,8 @@ let AppContextProvider = ({children}) => {
 
 	const getDataType = (type) => {
 
+		console.log({context: "getDataType"})
+
 		if([ "INT64","FLOAT64"].includes(type)) return "number";
 		if(type == "STRING") return "text";
 	}
@@ -259,6 +275,8 @@ let AppContextProvider = ({children}) => {
 
 	const getUserInfo = async (id) => {
 
+		console.log({context: "getUserInfo"})
+
 		let resp = await fetchData(`SELECT * FROM auth0_user WHERE id = ${id}`, "/neon-query");
 
 		console.log({getUserInfo: {resp}})
@@ -267,6 +285,8 @@ let AppContextProvider = ({children}) => {
 	}
 
 	const getRoles = async () => {
+		
+		console.log({context: "getRoles"})
 
 		let resp = await fetchData("SELECT unnest(enum_range(NULL::roles))", "/neon-query")
 
@@ -280,7 +300,7 @@ let AppContextProvider = ({children}) => {
 
 	const createProducModifyLog = async (IS_ADD_EDIT_DELETE, marketPlace) => {
 
-
+		console.log({context: "createProducModifyLog"})
 
 		console.log({createProducModifyLog: {IS_ADD_EDIT_DELETE, marketPlace}})
 		let colArr = displayColumns.map( x => x.column_name)

@@ -161,7 +161,7 @@ const UsersAdd = () => {
 			</p>
 
 			<div>
-			entity id(s): &nbsp;
+			Only access these brands: &nbsp;
 				{user.entities.length > 0 ?
 				user.entities.map( x => (
 				<span key={x}>
