@@ -193,7 +193,7 @@ const UsersEdit = () => {
 				</select>
 				&nbsp;<button onClick={() => updateUserInfo('role')}>update</button>
 			</span></p>
-			entity id(s): &nbsp;
+			Only access these brands: &nbsp;
 			{editUserEntities ?
 			<div>
 				{userEntities.map( x => (
