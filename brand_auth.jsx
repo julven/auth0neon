@@ -118,7 +118,10 @@ const BrandAuth = () => {
 
 		let sql2 = `SELECT * FROM agency WHERE user_owner_id = '${neonUser.user_id}'`
 
-		let sql3 = `SELECT * FROM client_entity_info_v2 WHERE id = ${brand.brand_entity_id}`
+		// let sql3 = `SELECT * FROM client_entity_info_v2 WHERE id = ${brand.brand_entity_id}`
+		let sql3 = `SELECT * FROM client_profile_info_plus 
+		WHERE client_entity_id = '${brand.brand_entity_id}'
+		`
 
 
 
@@ -128,12 +131,13 @@ const BrandAuth = () => {
 		let data = await Promise.all([
 			fetchData(sql, "/neon-query"),
 			fetchData(sql2, "/neon-query"),
-			fetchData(sql3, "/neon-query"),
+			// fetchData(sql3, "/neon-query"),
+			fetchData(sql3, "/neon-market"),
 		])
 
 		let resp = data[0], agency = data[1], company_list = data[2]
 
-		// console.log({getAuthorizedMarketplace: {data}})
+		console.log({getAuthorizedMarketplace: {data}})
 
 		// return
 
@@ -144,14 +148,16 @@ const BrandAuth = () => {
 				brand,
 				marketplace: marketplaceList.filter( xx => xx.id == Number(x.marketplace_id))[0],
 				agency: agency[0],
+				
 			
 			}
 		})
 		resp = resp.map( x => {
 			return {
 				...x,
-				sellers:  company_list.filter(xx => xx.company_type.toLowerCase() == 'seller' && xx.marketplace_id == x.marketplace.marketplaceid),
-				vendors:  company_list.filter(xx => xx.company_type.toLowerCase()  == 'vendor'&& xx.marketplace_id == x.marketplace.marketplaceid)
+				// sellers:  company_list.filter(xx => xx.company_type.toLowerCase() == 'seller' && xx.marketplace_id == x.marketplace.marketplaceid),
+				// vendors:  company_list.filter(xx => xx.company_type.toLowerCase()  == 'vendor'&& xx.marketplace_id == x.marketplace.marketplaceid)
+				company: company_list.filter( xx => xx.countryCode == x.marketplace.countrycode)[0] || null	
 			}
 		})
 
@@ -168,8 +174,8 @@ const BrandAuth = () => {
 
 		let sql = `
 			SELECT * 
-			FROM client_profile_info 
-			WHERE client_id = ${x.brand.brand_entity_id} 
+			FROM client_profile_info_plus 
+			WHERE client_entity_id = '${x.brand.brand_entity_id}'
 			AND profile_type = '${x.brand.account_type == 'seller' ? 'seller_central': x.brand.account_type == 'vendor' ? 'vendor_central': x.brand.account_type}'
 			AND "countryCode" = '${x.marketplace.countrycode}'
 
@@ -200,6 +206,13 @@ const BrandAuth = () => {
 	useEffect(() => {
 		console.log({selectedMarketPlace})
 	}, [selectedMarketPlace])
+	useEffect(() => {
+		console.log({brand})
+	}, [brand])
+
+	useEffect(() => {
+		console.log({selectedMarketPlace})
+	}, [selectedMarketPlace])
 
 	const ShowLinkOrStatus =  ({x}) => {
 
@@ -212,6 +225,10 @@ const BrandAuth = () => {
 			})()
 			
 		}, [])
+
+		useEffect(() => {
+			console.log({auth})
+		}, [auth])
 
 		let url = [
 			
@@ -231,7 +248,7 @@ const BrandAuth = () => {
 		if("id" in auth) 
 		return(
 			<>
-				{auth.id && auth.active ? 	
+				{auth.profile_active_status && auth.info_active_status ? 	
 				"active"
 				:
 				'inactive'
@@ -292,8 +309,8 @@ const BrandAuth = () => {
 						<th>date start</th>
 						{brand.account_type && brand.account_type == 'seller' ? <th>seller status</th>:null}
 						{brand.account_type && brand.account_type == 'vendor' ? <th>vendor status</th>:null}
-						{brand.ads_management && brand.ads_management.includes('ppc') ? <th>ppc status</th>:null}
-						{brand.ads_management && brand.ads_management.includes('dsp') ? <th>dsp status</th>:null}
+					{/*	{brand.ads_management && brand.ads_management.includes('ppc') ? <th>ppc status</th>:null}
+						{brand.ads_management && brand.ads_management.includes('dsp') ? <th>dsp status</th>:null}*/}
 						<th></th>
 					</tr>
 				</thead>
@@ -304,9 +321,13 @@ const BrandAuth = () => {
 							<td>{moment(x.date_start).format("MMM DD, YYYY")}</td>
 
 							<td><ShowLinkOrStatus x={x}/></td>
-					
+					{/*
 							{brand.ads_management && brand.ads_management.includes('ppc') ? <td>{x.sellers.length > 0 ? "active": "inactive"}</td>:null}
 							{brand.ads_management && brand.ads_management.includes('dsp') ? <td>{x.vendors.length > 0 ? "active": "inactive"}</td>:null}
+							*/}
+
+
+
 							<td>
 								<div>
 								<Link to={`/brand-auth-view/${x.id}`}>view</Link>

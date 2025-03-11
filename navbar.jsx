@@ -21,10 +21,10 @@ const Navbar = () => {
 		<div>
 		{token && neonUser.email ? 
 			<div>
-				<span><Link to="/">Home</Link></span>&nbsp;
+				{/*<span><Link to="/">Home</Link></span>&nbsp;*/}
 				{["admin","owner"].includes(neonUser.role) && 
 				<>
-				|&nbsp;<span><Link to="/users">Users</Link></span>&nbsp;
+				{/*|&nbsp;<span><Link to="/users">Users</Link></span>&nbsp;*/}
 				|&nbsp;<span><Link to="/brand">Brands</Link></span>&nbsp;
 				|&nbsp;<span><Link to="/subscription">Subscription</Link></span>&nbsp;
 				</>}
@@ -43,8 +43,8 @@ const Navbar = () => {
 				{neonUser['active?'] == true? 
 				<div>
 					<Routes>	
-						<Route path="/" element={<Home />}/>
-						<Route path="/:id" element={<Home />}/>
+						<Route path="/" element={<Brand />}/>
+						{/*<Route path="/:id" element={<Home />}/>*/}
 						<Route path="/add-product" element={<BigQueryAdd />}/>	
 						<Route path="/edit-product/:id" element={<BigQueryEdit />}/>	
 						{['editor', 'normal',null,undefined].includes(neonUser.role) ? 

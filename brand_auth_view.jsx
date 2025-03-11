@@ -37,7 +37,7 @@ const BrandAuthView = () => {
 
 		let sql2 = `
 			SELECT * 
-			FROM client_profile_info 
+			FROM client_profile_info_plus 
 			WHERE client_id = ${resp[0].brand_entity_id} 
 			AND profile_type = '${resp[0].account_type == 'seller' ? 'seller_central': resp[0].account_type == 'vendor' ? 'vendor_central': resp[0].account_type}'
 			AND "countryCode" = (SELECT "countryCode" FROM marketplace_info WHERE id = ${resp[0].marketplace_id})
