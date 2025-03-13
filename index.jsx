@@ -103,7 +103,7 @@ root.render(
 		<HashRouter>
 			
 				<Index />
-			
+				<GlobalStyles />
 		</HashRouter>
 	</AppContextProvider>
 );

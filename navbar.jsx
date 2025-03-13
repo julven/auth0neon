@@ -44,6 +44,7 @@ const Navbar = () => {
 				<div>
 					<Routes>	
 						<Route path="/" element={<Brand />}/>
+						<Route path="/login" element={<Brand />}/>
 						{/*<Route path="/:id" element={<Home />}/>*/}
 						<Route path="/add-product" element={<BigQueryAdd />}/>	
 						<Route path="/edit-product/:id" element={<BigQueryEdit />}/>	

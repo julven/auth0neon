@@ -1,14 +1,21 @@
 const Login = () => {
 
-	const {loginLoaded, setLoginLoaded } = useContext(AppContext)
+	const {loginLoaded, setLoginLoaded ,
+
+		marketplaceList, setMarketplaceList,
+		getMarketPlace
+	} = useContext(AppContext)
 
 
 	const [user, setUser] = useState({
 		email: "",
 		password: "",
+		confirm: "",
 		fname: "",
 		lname: "",
 		aname: "",
+		marketplace: "",
+
 	})
 	const [wrongPass, setWrongPass] = useState(false)	
 	const [userRegistered, setUserRegistered] = useState(false)
@@ -20,6 +27,7 @@ const Login = () => {
 
 	const loginHandler = () => {
 		setWrongPass(false)
+		setGeneralError("")
 		console.log({user})
 		// return
 
@@ -42,6 +50,7 @@ const Login = () => {
 				...user,
 				password: ''
 			})
+			setGeneralError(err.description || "")
 		});
 	}
 
@@ -66,8 +75,16 @@ const Login = () => {
 
 
 		let valid = true, errors = []
+
+
+		if(user.password != user.confirm) {
+			setGeneralError("Confirm and Paswword did not match.")
+			return
+		}
+
+
 		Object.keys(user).forEach( x => {
-			if(user[x] == "") {
+			if(user[x] == "" && x!= "lname") {
 				console.log({[x] : user[x]})
 				valid = false
 				errors.push(x)
@@ -75,6 +92,8 @@ const Login = () => {
 		})
 		setErrList(errors)
 		if(!valid) return
+
+			// return
 
 		webAuth.signup({
 			connection: "Username-Password-Authentication",
@@ -84,13 +103,20 @@ const Login = () => {
 				fname: user.fname,
 				lname: user.lname,
 				aname: user.aname,
-				role: "owner"
+				role: "owner",
+				marketplace_id: user.marketplace
 			}
 		}, function (err) {
 			
 			if(err) {
 				console.log({registerUserHandler: {err}})
-				setGeneralError(err.description)
+				setGeneralError(() => {
+		        	if(err.code == "invalid_password") {
+		        		return err.policy
+		        	}
+
+		        	return "invalid password"
+		        })
 				return 
 
 			} 
@@ -112,7 +138,7 @@ const Login = () => {
 		    }, function (err, resp) {
 		      if(err){
 		        console.log({forgetPasswordHandler: {err}});
-		        setGeneralError(err.message)
+		        setGeneralError(err.description || "error! please try again.")
 		      }else{
 		        console.log(resp);
 		        setResetPass(true)
@@ -137,13 +163,36 @@ const Login = () => {
 
 	useEffect(() => {
 		console.log({webAuth})
+		getMarketPlace()
 	}, [])
 
 	useEffect(() => {
-		console.log({errList})
-	}, [errList])
+		console.log({marketplaceList})
+	}, [marketplaceList])
 
+	if(ui) return (
+		<div  className="login-bg ">
+			<UiLogin 
+			loginLoaded={loginLoaded}
+			mode={mode}
+			wrongPass={wrongPass}
+			userRegistered={userRegistered}
+			user={user}
+			userChangeHandler={userChangeHandler}
+			loginHandler={loginHandler}
+			generalError={generalError}
+			errList={errList}
+			registerUserHandler={registerUserHandler}
+			registerHandler={registerHandler}
+			forgetPasswordHandler={forgetPasswordHandler}
+			marketplaceList={marketplaceList}
+			setMarketplaceList={setMarketplaceList}
+			resetPass={resetPass}
+			/>
+		</div>
+		)
 	return (
+
 		<div>
 			{loginLoaded ? 
 			<div>
