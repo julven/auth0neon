@@ -9,14 +9,14 @@ const GlobalStyles = () =>{
 	const adjustH = () => {
 		let scrollHeight =  document.documentElement.scrollHeight
 		let clientHeight =  document.documentElement.clientHeight
-		// sH(clientHeight)
-		// let newH = scrollHeight > clientHeight ? scrollHeight : clientHeight
-		// console.log({newH, clientHeight, scrollHeight})
-		
 
+		
 		let newH = 0
 		if(mode == 1 || mode == 3) newH = clientHeight;
-		if(mode == 2)newH = scrollHeight;
+		if(mode == 2) newH = scrollHeight;
+
+		console.log({mode, newH, clientHeight, scrollHeight})
+
 		sH(newH)
 	}
 
