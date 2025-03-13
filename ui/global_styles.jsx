@@ -1,5 +1,32 @@
 const GlobalStyles = () =>{
 
+	const {
+		mode, setMode,
+	} = useContext(AppContext)
+	const [h, sH] = useState(null)
+
+
+	const adjustH = () => {
+		let scrollHeight =  document.documentElement.scrollHeight
+		let clientHeight =  document.documentElement.clientHeight
+		// sH(clientHeight)
+		// let newH = scrollHeight > clientHeight ? scrollHeight : clientHeight
+		// console.log({newH, clientHeight, scrollHeight})
+		
+
+		let newH = 0
+		if(mode == 1 || mode == 3) newH = clientHeight;
+		if(mode == 2)newH = scrollHeight;
+		sH(newH)
+	}
+
+	useEffect(() =>{
+		adjustH()
+	}, [])
+
+	useEffect(() => {
+		adjustH()
+	}, [mode])
 
 	return (
 		<style jsx="true">
@@ -20,12 +47,13 @@ const GlobalStyles = () =>{
 
 			.login-bg {
 
-				height: 100vh;
+				height: ${h}px;
 				background-image: url(./src/bispoke_brandmark_white.png), url(./src/bispoke_brandmark_white_2.png);
 				background-position: right bottom, left top;
 				background-repeat: no-repeat, no-repeat;
 				background-size: 300px;
 				padding: 20px 20px;
+
 			}
 			.login-container {
 				width: 450px;

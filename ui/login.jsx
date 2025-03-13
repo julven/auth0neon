@@ -35,7 +35,7 @@ const UiLogin = (props) => {
 				{mode == 1 ? 
 				<>
 					<div style={{padding: "0px 50px"}}>	
-						<p className="fs-2">Login</p>
+						<p className="fs-2 mb-2">Login</p>
 						
 							<div style={{height: 2}} className="gradiant-h mb-4"></div>
 						
@@ -131,7 +131,7 @@ const UiLogin = (props) => {
 				<>
 					<div className="d-flex gap-2" style={{padding :"0px 25px"}}>
 							<i onClick={(e) =>registerHandler(e,1)} style={{cursor: "pointer"}} className="bi bi-chevron-left fs-4 align-self-center"></i>
-							<p className="fs-2 mb-0">Forgot your password?</p>
+							<p className="fs-2 mb-2">Forgot your password?</p>
 						</div>
 					<div  style={{padding :"0px 50px"}}>
 						

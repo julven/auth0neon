@@ -44,6 +44,7 @@ let AppContextProvider = ({children}) => {
 	const [userInfo, setUserInfo] = useState({})
 	const [agencyList, setAgencyList] = useState([])
 	const [roles, setRoles] = useState([])
+	const [mode, setMode] = useState(1)
 
 
 	const fetchData = async (query,endpoint) => {
@@ -411,6 +412,7 @@ let AppContextProvider = ({children}) => {
 			getRoles,
 			roles, setRoles,
 			createProducModifyLog,
+			mode, setMode,
 
 		}}>
 

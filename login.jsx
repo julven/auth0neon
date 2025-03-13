@@ -3,7 +3,8 @@ const Login = () => {
 	const {loginLoaded, setLoginLoaded ,
 
 		marketplaceList, setMarketplaceList,
-		getMarketPlace
+		getMarketPlace,
+		mode, setMode,
 	} = useContext(AppContext)
 
 
@@ -20,7 +21,7 @@ const Login = () => {
 	const [wrongPass, setWrongPass] = useState(false)	
 	const [userRegistered, setUserRegistered] = useState(false)
 	const [resetPass, setResetPass] = useState(false)
-	const [mode, setMode] = useState(1)
+	
 	const [errList, setErrList] = useState([])
 	const [ generalError, setGeneralError] = useState("")
 	
@@ -171,8 +172,10 @@ const Login = () => {
 	}, [marketplaceList])
 
 	if(ui) return (
-		<div  className="login-bg ">
+		<div  className="login-bg">
+		
 			<UiLogin 
+	
 			loginLoaded={loginLoaded}
 			mode={mode}
 			wrongPass={wrongPass}
