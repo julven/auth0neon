@@ -1,6 +1,6 @@
-const UiNavbar = () => {
+const UiNavbar = (props) => {
 
-	let {token, setToken, neonUser} = useContext(AppContext	)
+	let {token, setToken, neonUser} = props
 	let location = useLocation()
 	let [path, setPath] = useState("")
 
@@ -127,7 +127,7 @@ const UiNavbar = () => {
 
 					</div>
 					:
-					<Login />
+					null
 					}
 					
 				</div>

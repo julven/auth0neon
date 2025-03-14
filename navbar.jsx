@@ -22,7 +22,7 @@ const Navbar = () => {
 		{token && neonUser.email ? 
 			<>
 			{ui?
-			<UiNavbar />
+			<UiNavbar token={token} setToken={setToken} neonUser={neonUser}/>
 			:
 			<div>
 				{/*<span><Link to="/">Home</Link></span>&nbsp;*/}
@@ -40,7 +40,7 @@ const Navbar = () => {
 			</>
 			
 		:
-		null
+		<Login />
 		}
 			
 		
