@@ -15,7 +15,7 @@ const GlobalStyles = () =>{
 		if(mode == 1 || mode == 3) newH = clientHeight;
 		if(mode == 2) newH = scrollHeight;
 
-		console.log({mode, newH, clientHeight, scrollHeight})
+		// console.log({mode, newH, clientHeight, scrollHeight})
 
 		sH(newH)
 	}
@@ -44,6 +44,11 @@ const GlobalStyles = () =>{
 			.poppins {
 				font-family: "Poppins", sans-serif;
 			}	
+			.entity-table tr, .entity-table td,  .entity-table th, .entity-table  {
+				border: 1px solid black;
+				border-collapse: collapse;
+				padding: 3px;
+			}
 
 			.login-bg {
 
@@ -90,6 +95,12 @@ const GlobalStyles = () =>{
 				border-radius: 25px;
 				padding: 0px 0px 0px 25px;
 			}
+			.navbar-sidebar {
+				width: 250px;
+			 	background-image: linear-gradient(to bottom,  #CB3974, #FF9933);
+				height: ${document.documentElement.clientHeight}px;
+			}
+
 		`}
 		</style>
 

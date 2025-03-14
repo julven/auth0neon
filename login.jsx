@@ -24,6 +24,7 @@ const Login = () => {
 	
 	const [errList, setErrList] = useState([])
 	const [ generalError, setGeneralError] = useState("")
+	const [countries, setCountries] = useState([])
 	
 
 	const loginHandler = () => {
@@ -105,7 +106,7 @@ const Login = () => {
 				lname: user.lname,
 				aname: user.aname,
 				role: "owner",
-				marketplace_id: user.marketplace
+				country: user.marketplace
 			}
 		}, function (err) {
 			
@@ -148,6 +149,22 @@ const Login = () => {
 
 	}
 
+	const getAllCountries =async () => {
+
+
+		let resp = await fetch('./src/country.json')
+
+		resp = await resp.json()
+		let top = resp.filter( x => ["US","CA","MX"].includes(x.cca2))
+		top = top.sort((a, b) => b.name.common.localeCompare(a.name.common));
+		resp = resp.sort((a, b) => a.name.common.localeCompare(b.name.common)).filter( x => !["US","CA","MX"].includes(x.cca2));
+		resp = [...top, ...resp]
+
+		console.log({getAllCountries: resp})
+
+		setCountries(resp)
+	}
+
 	useEffect(() => {
 	
 	if([2, 3].includes(mode)) {
@@ -165,6 +182,7 @@ const Login = () => {
 	useEffect(() => {
 		console.log({webAuth})
 		getMarketPlace()
+		getAllCountries()
 	}, [])
 
 	useEffect(() => {
@@ -191,6 +209,7 @@ const Login = () => {
 			marketplaceList={marketplaceList}
 			setMarketplaceList={setMarketplaceList}
 			resetPass={resetPass}
+			countries={countries}
 			/>
 		</div>
 		)

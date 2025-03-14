@@ -1,4 +1,4 @@
-const UiInput1 = ({field, value, userChangeHandler, marketplaceList}) => {
+const UiInput1 = ({field, value, userChangeHandler, countries}) => {
 
 	return(
 		<div className="input1" >
@@ -22,10 +22,10 @@ const UiInput1 = ({field, value, userChangeHandler, marketplaceList}) => {
 						}  style={{width: "100%"}}/>
 				</div>
 				{field == "marketplace" ?
-					<select className="flex-grow-1 poppins" onChange={e => userChangeHandler(e.target.value, field)}>
+					<select className="flex-grow-1 poppins w-100" onChange={e => userChangeHandler(e.target.value, field)}>
 						<option className="poppins">-select-</option>
-						{marketplaceList.map( x => (
-						<option className="poppins" key={x.id} value={x.id}>{x.country}</option>
+						{countries.map( x => (
+						<option className="poppins" key={x.cca2} value={x.cca2}>{x.name.common}</option>
 
 						))
 

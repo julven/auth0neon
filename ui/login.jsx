@@ -13,7 +13,8 @@ const UiLogin = (props) => {
 		registerHandler,
 		forgetPasswordHandler,
 		marketplaceList,
-		resetPass
+		resetPass,
+		countries
 	} = props
 
 
@@ -103,7 +104,7 @@ const UiLogin = (props) => {
 
 							<div>
 								<p className="mb-1 fw-bold poppins">Country</p>
-								<UiInput1 field={"marketplace"} value={user.marketplace}  userChangeHandler={userChangeHandler}  marketplaceList={marketplaceList}/>
+								<UiInput1 field={"marketplace"} value={user.marketplace}  userChangeHandler={userChangeHandler}  countries={countries}/>
 							</div>
 
 

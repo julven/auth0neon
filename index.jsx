@@ -85,11 +85,7 @@ const Index = () => {
 			{/*<Account />*/}
 			<style jsx="true">{`
 			
-			.entity-table tr, .entity-table td,  .entity-table th, .entity-table  {
-				border: 1px solid black;
-				border-collapse: collapse;
-				padding: 3px;
-			}
+			
 		`}
 
 		</style>

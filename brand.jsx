@@ -29,12 +29,12 @@ const Brand = () => {
 
 
 	return(
-		<div>	
+		<div >	
 			<p>brand</p>
 
 			<p><Link to="/brand-add">add brand</Link></p>
 			{brandList.length > 0 ?
-			<div>
+			<div >
 			
 				<table className="entity-table">	
 					<thead>

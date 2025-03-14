@@ -18,6 +18,7 @@ const Account = () => {
 	const [error, setError] = useState("")
 
 	const [edits, setEdits] = useState("")
+
 	const [name, setName] = useState({
 		fname: "",
 		lname: ""
@@ -103,6 +104,7 @@ const Account = () => {
 	}
 
 	const changePasswordHandler =  (e, val) => {
+		e.preventDefault()
 		setChangePassword(val)
 		setResetPassSent(false)
 	}
