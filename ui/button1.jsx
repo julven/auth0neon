@@ -1,10 +1,11 @@
-const UiButton1 = ({text, submit}) => {
+const UiButton1 = ({text, submit, width}) => {
 
 
 
 	return(
 		<div 
-		style={{cursor: "pointer"}}
+
+		style={{cursor: "pointer", width: width ? width : '100%'}}
 		onClick={submit}
 		className="button1 d-flex justify-content-between">
 

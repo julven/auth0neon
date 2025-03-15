@@ -60,6 +60,11 @@ const GlobalStyles = () =>{
 				padding: 20px 20px;
 
 			}
+			.container1 {
+				padding: 25px 25px;
+				border-radius: 15px;		
+				background-color: white;
+			}	
 			.login-container {
 				width: 450px;
 				padding: 20px 0px;
@@ -94,6 +99,14 @@ const GlobalStyles = () =>{
 				background-color:#650260;
 				border-radius: 25px;
 				padding: 0px 0px 0px 25px;
+			}
+			.button2 {
+				height: 40px;
+				width: 100%;
+				cursor: "pointer";
+				border: 1px solid white;
+				border-radius: 25px;
+				
 			}
 			.navbar-sidebar {
 				width: 250px;

@@ -4,60 +4,59 @@ const UiNavbar = (props) => {
 	let location = useLocation()
 	let [path, setPath] = useState("")
 
+	let [width, setWidth] = useState(0)
+
+	const getWidth = () => {
+
+		let h = window.innerWidth
+
+		setWidth(h)
+	}
+
 	useEffect(() => {
 		console.log({location})
 		setPath(location.pathname)
 	}, [location])
 
+	useEffect(() => {
+		// console.log({width})
+
+	}, [width])
+
+	useEffect(() => {
+		getWidth()
+		window.addEventListener( "resize", getWidth)
+	}, [])
+
 	return (
 		<div className="d-flex">
-			<div className="navbar-sidebar ">
-				<div className="d-flex justify-content-center">
-					<div style={{width: 130}} className="m-3">	
-						<img src="./src/logo-dash.png" className="w-100"/>
+			<div className="navbar-sidebar">
+				<Link to="/">
+					<div className="d-flex justify-content-center">
+						<div style={{width: 130}} className="m-3">	
+							<img src="./src/logo-dash.png" className="w-100"/>
+						</div>
+						
 					</div>
-					
-				</div>
+				</Link>
 				<hr className="text-white m-0"/>
 
+
+
 				<div className="m-4 d-flex flex-column gap-3">
-					<Link to="/" style={{textDecoration: "none"}}>
-						<div className="d-flex gap-2">
-							{path == "/" ?
-							<div style={{width: 35, height: 35}} className="bg-white p-1 rounded opacity-75">
-								<img src="./src/home.png" className="w-100 opacity-100"  />
-							</div>
-							:
-							<div style={{width: 35, height: 35}} className=" p-1 rounded ">
-								<img src="./src/home-off.png" className="w-100"  />
-							</div>
-							}
-								
-							<p className="text-white fs-6 m-0">Home</p>
-							
-						</div>
-					</Link>
-					<Link to="/brand" style={{textDecoration: "none"}}>
-						<div className="d-flex gap-2">
-							{path.includes( "brand") ?
-							<div style={{width: 35, height: 35}} className="bg-white p-1 rounded opacity-75">
-								<img src="./src/account-on.png" className="w-100 opacity-100"  />
-							</div>
-							:
-							<div style={{width: 35, height: 35}} className=" p-1 rounded ">
-								<img src="./src/account.png" className="w-100 "  />
-							</div>
-							}
-								
-							<p className="text-white fs-6 m-0">Account/Brands</p>
-							
-						</div>
-					</Link>
+				{path == ("/") ?
+				<SidebarDashboardBrand path={path}/>
+				:
+				path.includes("/account") ? 
+				<SidebarAccount path={path}/>
+				:
+				<SidebarDashboardBrand path={path}/>
+				}	
 				</div>
 
 			</div>
 
-			<div style={{width: '100%', overflow: "auto"}} >
+			<div style={{width: width - 250}}>
 				<div style={{height: 80}} className="bg-white w-100 px-5">
 					<div className="d-flex justify-content-between h-100">
 						<p className="poppins align-self-center mb-0">{
@@ -107,9 +106,11 @@ const UiNavbar = (props) => {
 								<Route path="/users-view/:id" element={<UsersView />}/>
 								<Route path="/users-add" element={<UsersAdd />}/>
 								<Route path="/users-edit/:id" element={<UsersEdit />}/>
+
 								</>
 								}
 								<Route path="/account" element={<Account />}/> 
+								<Route path="/account/change-pass" element={<AccountChangePassword />}/>	
 							</Routes>
 							<Outlet />
 						</>
