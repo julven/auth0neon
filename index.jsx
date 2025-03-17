@@ -5,8 +5,8 @@
 
 const Index = () => {
 
-	const {pathname} = useLocation()
-
+	const location = useLocation()
+	const {pathname} = location
 	const {
 		authUser, setAuthUser,
 		token, setToken,
@@ -14,7 +14,7 @@ const Index = () => {
 		setLoginLoaded,
 		fetchData,
 		neonUser, setNeonUser,
-		getNeonUser
+		getNeonUser,
 
 	} = useContext(AppContext)
 

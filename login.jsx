@@ -5,6 +5,8 @@ const Login = () => {
 		marketplaceList, setMarketplaceList,
 		getMarketPlace,
 		mode, setMode,
+		getAllCountries,
+		countries, setCountries
 	} = useContext(AppContext)
 
 
@@ -24,9 +26,9 @@ const Login = () => {
 	
 	const [errList, setErrList] = useState([])
 	const [ generalError, setGeneralError] = useState("")
-	const [countries, setCountries] = useState([])
-	
+	// const [countries, setCountries] = useState([])
 
+	
 	const loginHandler = () => {
 		setWrongPass(false)
 		setGeneralError("")
@@ -149,21 +151,21 @@ const Login = () => {
 
 	}
 
-	const getAllCountries =async () => {
+	// const getAllCountries =async () => {
 
 
-		let resp = await fetch('./src/country.json')
+	// 	let resp = await fetch('./src/country.json')
 
-		resp = await resp.json()
-		let top = resp.filter( x => ["US","CA","MX"].includes(x.cca2))
-		top = top.sort((a, b) => b.name.common.localeCompare(a.name.common));
-		resp = resp.sort((a, b) => a.name.common.localeCompare(b.name.common)).filter( x => !["US","CA","MX"].includes(x.cca2));
-		resp = [...top, ...resp]
+	// 	resp = await resp.json()
+	// 	let top = resp.filter( x => ["US","CA","MX"].includes(x.cca2))
+	// 	top = top.sort((a, b) => b.name.common.localeCompare(a.name.common));
+	// 	resp = resp.sort((a, b) => a.name.common.localeCompare(b.name.common)).filter( x => !["US","CA","MX"].includes(x.cca2));
+	// 	resp = [...top, ...resp]
 
-		console.log({getAllCountries: resp})
+	// 	console.log({getAllCountries: resp})
 
-		setCountries(resp)
-	}
+	// 	setCountries(resp)
+	// }
 
 	useEffect(() => {
 	

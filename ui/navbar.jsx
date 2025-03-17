@@ -1,5 +1,7 @@
 const UiNavbar = (props) => {
 
+	const { hh } = useContext(AppContext)
+
 	let {token, setToken, neonUser} = props
 	let location = useLocation()
 	let [path, setPath] = useState("")
@@ -80,7 +82,7 @@ const UiNavbar = (props) => {
 						</div>
 					</div>
 				</div>
-				<div  >
+				<div  style={{maxHeight: `calc(${hh}px - 80px)`, overflowY: "auto"}} id="viewEl">
 					{ token ? 
 					<div>
 						{neonUser['active?'] == true? 

@@ -1,4 +1,4 @@
-const UiInput1 = ({field, value, userChangeHandler, countries}) => {
+const UiInput1 = ({field, value, userChangeHandler, countries,readOnly}) => {
 
 	return(
 		<div className="input1" >
@@ -9,23 +9,30 @@ const UiInput1 = ({field, value, userChangeHandler, countries}) => {
 						"./src/email.png" 
 						: ["confirm",  "password" ].includes(field) ? 
 						"./src/pass.png": 
-						field == "fname" ?
+						["first_name", "fname", "last_name", "lname"].includes(field) ?
 						"./src/profile-circle.png"
 						:
-						field == "aname" ?
-						"./src/building.png" 
+
+						 ["agency_name", "aname"].includes(field) ?
+						"./src/building.png" 	
 						:
-						field == "marketplace" ?
+						["zip", "marketplace", "country"].includes(field)?
 						"./src/web.png" 
+						:
+						field == "mobile" ?
+						"./src/mobile.png" 
+						:
+						field == "location" ?
+						"./src/location.png" 
 						:
 						null
 						}  style={{width: "100%"}}/>
 				</div>
-				{field == "marketplace" ?
-					<select className="flex-grow-1 poppins w-100" onChange={e => userChangeHandler(e.target.value, field)}>
+				{["marketplace", "country"].includes(field) ?
+					<select className="flex-grow-1 poppins w-100" value={value}  onChange={e => userChangeHandler(e.target.value, field)}>
 						<option className="poppins">-select-</option>
 						{countries.map( x => (
-						<option className="poppins" key={x.cca2} value={x.cca2}>{x.name.common}</option>
+						<option className="poppins" key={x.cca2} value={x.cca2} >{x.name.common}</option>
 
 						))
 
@@ -33,6 +40,7 @@ const UiInput1 = ({field, value, userChangeHandler, countries}) => {
 					</select>
 					:
 					<input 
+					readOnly={readOnly || false}
 					value={value} onChange={e => userChangeHandler(e.target.value, field)}
 					className="flex-grow-1 poppins" type={field == "email" ? "email" : ["confirm",  "password" ].includes(field) ? "password" : "text"}/>
 				}

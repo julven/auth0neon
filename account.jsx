@@ -140,7 +140,9 @@ const Account = () => {
 		}
 	}, [edits])
 
-	return (
+	if(ui) return <AccountUpdateInfo />
+
+	else return (
 		<div>
 		{changePassword ? 
 			<div>

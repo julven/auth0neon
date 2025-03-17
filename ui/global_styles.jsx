@@ -2,6 +2,8 @@ const GlobalStyles = () =>{
 
 	const {
 		mode, setMode,
+		hh, setHh,
+		getSrollHeight,
 	} = useContext(AppContext)
 	const [h, sH] = useState(null)
 
@@ -20,13 +22,22 @@ const GlobalStyles = () =>{
 		sH(newH)
 	}
 
+
+
 	useEffect(() =>{
+		
 		adjustH()
+		getSrollHeight( window.innerHeight)
+		window.addEventListener('resize', () => getSrollHeight(window.innerHeight))
 	}, [])
 
 	useEffect(() => {
 		adjustH()
 	}, [mode])
+
+	useEffect(() => {
+		console.log({hh})
+	}, [hh])
 
 	return (
 		<style jsx="true">
@@ -111,7 +122,7 @@ const GlobalStyles = () =>{
 			.navbar-sidebar {
 				width: 250px;
 			 	background-image: linear-gradient(to bottom,  #CB3974, #FF9933);
-				height: ${document.documentElement.clientHeight}px;
+				height: ${hh}px;
 			}
 
 		`}
