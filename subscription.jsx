@@ -218,7 +218,16 @@ const Subscription = () => {
 		if(neonUser.user_id && neonUser.stripe_customer_id == null) createStripeCustomerId()
 	}, [neonUser])
 
-
+	if(ui) return <UiSubscription 
+		subscribed={subscribed}
+		showProductName={showProductName}
+		cancelSubscription={cancelSubscription}
+		products={products}
+		range={range}
+		setRange={setRange}
+		createSubscription={createSubscription}
+		viewPaymentHistory={viewPaymentHistory}
+		/>;
 	return (
 		<div>
 		{subscribed.length > 0 ?

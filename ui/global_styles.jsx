@@ -68,7 +68,7 @@ const GlobalStyles = () =>{
 				background-position: right bottom, left top;
 				background-repeat: no-repeat, no-repeat;
 				background-size: 300px;
-				padding: 20px 20px;
+				
 
 			}
 			.container1 {
@@ -79,7 +79,8 @@ const GlobalStyles = () =>{
 			.login-container {
 				width: 450px;
 				padding: 20px 0px;
-				border-radius: 25px;	
+				border-radius: 25px;
+				background-color: white;
 			}
 			.bispoke-logo {
 
@@ -128,6 +129,9 @@ const GlobalStyles = () =>{
 				width: 35px;
 				height: 35px;
 				background: rgba(255, 255, 255, .2);
+			}
+			.slider {
+				accent-color:#650260;
 			}
 
 		`}

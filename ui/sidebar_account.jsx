@@ -46,6 +46,25 @@ const SidebarAccount = ({path}) => {
 				</div>
 			</Link>
 
+			<Link to="/account/subscription" style={{textDecoration: "none"}}>
+
+				<div className="d-flex gap-2">
+
+					{path.includes("/subscription") ?
+					<div style={{width: 35, height: 35}} className="bg-white p-1 rounded opacity-75">
+						{/*<img src="./src/pass.png" className="w-100 opacity-100"/>*/}
+					</div>
+					:
+					<div className="p-1 rounded off-icon">
+						{/*<img src="./src/pass-off.png" className="w-100"/>*/}
+					</div>
+					}
+						
+					<p className="text-white fs-6 m-0 align-self-center">Subscription</p>
+					
+				</div>
+			</Link>
+
 		</div>
 	)
 }

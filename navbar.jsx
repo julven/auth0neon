@@ -35,7 +35,6 @@ const Navbar = () => {
 				|&nbsp;<span><Link to="/account">Account</Link></span>&nbsp;
 				{/*|&nbsp;<span><Link to="/login">Login</Link></span>&nbsp;*/}
 			</div>
-
 			}
 			</>
 			

@@ -35,6 +35,8 @@ const UiNavbar = (props) => {
 		window.addEventListener( "resize", getWidth)
 	}, [])
 
+	if(path.includes("/subscription")) return <Subscription />
+
 	return (
 		<div className="d-flex">
 			<div className="navbar-sidebar">
@@ -125,7 +127,8 @@ const UiNavbar = (props) => {
 								</>
 								}
 								<Route path="/account" element={<Account />}/> 
-								<Route path="/account/change-pass" element={<AccountChangePassword />}/>	
+								<Route path="/account/change-pass" element={<AccountChangePassword />}/>
+								<Route path="/account/subscription" element={<>redirect...</>}/>	
 							</Routes>
 							<Outlet />
 						</>
