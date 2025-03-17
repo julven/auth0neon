@@ -15,6 +15,11 @@ const UiNavbar = (props) => {
 		setWidth(h)
 	}
 
+	const getInitals = () => {
+
+		return ((neonUser.first_name[0] || "ME") + (neonUser.last_name[0] || "")).toUpperCase()
+	}
+
 	useEffect(() => {
 		console.log({location})
 		setPath(location.pathname)
@@ -74,10 +79,18 @@ const UiNavbar = (props) => {
 							""
 						}</p>
 						<div className="d-flex justify-content-between gap-3 align-self-center">
-							<p className="poppins mb-0">Docs</p>
-							<p className="poppins mb-0">Contact</p>
+							<p className="poppins mb-0 align-self-center">Docs</p>
+							<p className="poppins mb-0 align-self-center">Contact</p>
 							<Link to="/account" style={{textDecoration: "none"}} className="poppins mb-0 text-dark">
-								Account
+								<div className="d-flex gap-1 justify-content-between">
+
+									<span className="align-self-center">Account</span>
+									<i className="bi bi-chevron-down align-self-center" style={{width: 15}}></i>
+									<div style={{width: 40, height: 40, borderRadius: 50}} className="gradiant-h d-flex justify-content-center">
+										<span className="align-self-center fw-bold text-white">{getInitals()}</span>
+									</div>
+								</div>
+								
 							</Link>
 						</div>
 					</div>
