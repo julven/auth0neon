@@ -12,7 +12,7 @@ const SidebarDashboardBrand = ({path}) => {
 						<img src="./src/home.png" className="w-100 opacity-100"  />
 					</div>
 					:
-					<div style={{width: 35, height: 35}} className=" p-1 rounded ">
+					<div className=" p-1 rounded off-icon">
 						<img src="./src/home-off.png" className="w-100"  />
 					</div>
 					}
@@ -28,7 +28,7 @@ const SidebarDashboardBrand = ({path}) => {
 						<img src="./src/account-on.png" className="w-100 opacity-100"  />
 					</div>
 					:
-					<div style={{width: 35, height: 35}} className=" p-1 rounded ">
+					<div  className=" p-1 rounded off-icon ">
 						<img src="./src/account.png" className="w-100 "  />
 					</div>
 					}

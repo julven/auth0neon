@@ -25,7 +25,7 @@ const GlobalStyles = () =>{
 
 
 	useEffect(() =>{
-		
+
 		adjustH()
 		getSrollHeight( window.innerHeight)
 		window.addEventListener('resize', () => getSrollHeight(window.innerHeight))
@@ -123,6 +123,11 @@ const GlobalStyles = () =>{
 				width: 250px;
 			 	background-image: linear-gradient(to bottom,  #CB3974, #FF9933);
 				height: ${hh}px;
+			}
+			.off-icon {
+				width: 35px;
+				height: 35px;
+				background: rgba(255, 255, 255, .2);
 			}
 
 		`}

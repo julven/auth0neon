@@ -17,7 +17,7 @@ const SidebarAccount = ({path}) => {
 						<img src="./src/profile-on.png" className="w-100 opacity-100"/>
 					</div>
 					:
-					<div style={{width: 35, height: 35}} className="p-1 rounded">
+					<div  className="p-1 rounded off-icon">
 						<img src="./src/profile-off.png" className="w-100"/>
 					</div>
 					}
@@ -36,7 +36,7 @@ const SidebarAccount = ({path}) => {
 						<img src="./src/pass.png" className="w-100 opacity-100"/>
 					</div>
 					:
-					<div style={{width: 35, height: 35}} className="p-1 rounded">
+					<div className="p-1 rounded off-icon">
 						<img src="./src/pass-off.png" className="w-100"/>
 					</div>
 					}
