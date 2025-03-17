@@ -25,7 +25,7 @@ const AccountChangePassword = () => {
 
 		console.log({changePassword: {password}})
 
-		setError(null)	
+		setError(null)
 		setGeneralMessage("")
 		setProceed(false)
 
@@ -61,6 +61,9 @@ const AccountChangePassword = () => {
 		},
 		function(err) {
 			console.log({err})
+			setGeneralMessage("current password is wrong.")
+			setError(true)
+			return
 		});
 
 
@@ -107,6 +110,9 @@ const AccountChangePassword = () => {
 			new: "",
 			current: ""
 		})
+
+		alert("Password change success. ")
+		window.location.reload()
 		return
 
 
