@@ -140,7 +140,9 @@ const Account = () => {
 		}
 	}, [edits])
 
-	if(ui) return <AccountUpdateInfo />
+	if(ui) return <AccountUpdateInfo 
+		logoutHandler={logoutHandler}
+		/>
 
 	else return (
 		<div>

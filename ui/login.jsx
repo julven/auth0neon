@@ -26,8 +26,8 @@ const UiLogin = (props) => {
 	return loginLoaded ?  (
 
 		<div className=" d-flex justify-content-center pb-5">
-			<div className="align-self-center">
-				<div className="d-flex justify-content-center mb-3">
+			<div className="align-self-center ">
+				<div className="d-flex justify-content-center mb-3 mt-4">
 					<div className="bispoke-logo align-self-center"></div>
 				</div>
 
@@ -38,7 +38,7 @@ const UiLogin = (props) => {
 					<div style={{padding: "0px 50px"}}>	
 						<p className="fs-2 mb-2">Login</p>
 						
-							<div style={{height: 2}} className="gradiant-h mb-4"></div>
+						<div style={{height: 2}} className="gradiant-h mb-4"></div>
 						
 						{generalError != "" && <p className="text-danger">{generalError}</p>}
 						{userRegistered ? <p className="text-success">registration successfull</p>: null}

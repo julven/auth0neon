@@ -1,4 +1,6 @@
-const AccountUpdateInfo = () => {
+const AccountUpdateInfo = ({
+	logoutHandler
+}) => {
 
 	const navigate = useNavigate()
 	const { countries, getAllCountries,
@@ -168,6 +170,7 @@ const AccountUpdateInfo = () => {
 
 					<div style={{maxWidth: 300}}>	
 						<UiButton1 text="Update Profile" submit={submitHandler}/>
+						<a href="#" onClick={logoutHandler}>logout</a>
 					</div>
 				</div>
 			</div> 
