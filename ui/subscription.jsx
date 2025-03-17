@@ -33,7 +33,7 @@ const UiSubscription = ({
 						<div className="d-flex " style={{padding: "0px 0px 8px 18px"}}>
 							<i 
 							onClick={goBack}
-							style={{cursor: "pointer"}} className="bi bi-chevron-left fs-4 align-self-center"></i>
+							style={{cursor: "pointer"}} className="bi bi-chevron-left fs-4 mt-1 align-self-center"></i>
 							<p className="fs-2 mb-0">Subscibe</p>
 						</div>
 
@@ -44,19 +44,21 @@ const UiSubscription = ({
 							{subscribed.length > 0 ?
 							<>
 								<div>
-									<p className="poppins text-center">you have subscribed to the following plan</p>
+									<p className="poppins text-center">You have subscribed to the following plan:</p>
 								</div>
 								{subscribed.map(x => (
 								<div key={x.id} className="text-center pb-3"	>
 									<div className="lh-1 mb-4">
 										<p className="fs-4">{showProductName(x,'name')}</p>	
-										<small className="poppins fs-6 text-secondary">{showProductName(x,'description')}</small>	
+										<small style={{fontSize: 14}} className="poppins text-secondary">{showProductName(x,'description')}</small>	
 									</div>
 									
 									{/*<button onClick={() => cancelSubscription(x)}>cancel subscription</button>*/}
-									<UiButton1 text="Cancel Subscription" submit={cancelSubscription}/>
+									<div className="d-flex flex-column gap-3">
+										<UiButton1 text="Cancel Subscription" submit={cancelSubscription}/>
+										<a className=" text-secondary mb-1" href="#" onClick={viewPaymentHistory} style={{textDecoration: "none", fontSize: 14}}>Payment History</a>
+									</div>
 								</div>
-
 
 								))
 

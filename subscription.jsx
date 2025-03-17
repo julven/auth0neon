@@ -233,7 +233,7 @@ const Subscription = () => {
 		{subscribed.length > 0 ?
 
 		<div>
-			<p>you have subscribed to the following plan</p>
+			<p>You have subscribed to the following plan:</p>
 
 			{subscribed.map(x => (
 				<div key={x.id}>
