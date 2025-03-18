@@ -55,7 +55,7 @@ const UiSubscription = ({
 									
 									{/*<button onClick={() => cancelSubscription(x)}>cancel subscription</button>*/}
 									<div className="d-flex flex-column gap-3">
-										<UiButton1 text="Cancel Subscription" submit={cancelSubscription}/>
+										<UiButton1 text="Cancel Subscription" submit={() => cancelSubscription(x)}/>
 										<a className=" text-secondary mb-1" href="#" onClick={viewPaymentHistory} style={{textDecoration: "none", fontSize: 14}}>Payment History</a>
 									</div>
 								</div>
