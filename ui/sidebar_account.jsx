@@ -52,11 +52,11 @@ const SidebarAccount = ({path}) => {
 
 					{path.includes("/subscription") ?
 					<div style={{width: 35, height: 35}} className="bg-white p-1 rounded opacity-75">
-						{/*<img src="./src/pass.png" className="w-100 opacity-100"/>*/}
+						<img src="./src/subs-on.png" className="w-100 opacity-100"/>
 					</div>
 					:
 					<div className="p-1 rounded off-icon">
-						{/*<img src="./src/pass-off.png" className="w-100"/>*/}
+						<img src="./src/subs.png" className="w-100"/>
 					</div>
 					}
 						

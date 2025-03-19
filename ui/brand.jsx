@@ -2,7 +2,8 @@ const UiBrand = ({
 	brandList
 }) => {
 
-	const { offCanvas, setPopupSidebarType, showCanvas, setShowCanvas, } = useContext(AppContext)
+	const { offCanvas, setPopupSidebarType, showCanvas, setShowCanvas,
+	sidebarTitle, setSideBarTitle } = useContext(AppContext)
 
 	const [test, setTest] = useState([1,2,3])
 	const [displayList, setDislpayList] = useState([])
@@ -28,6 +29,7 @@ const UiBrand = ({
 	}
 
 	const showCanvasHandler = () => {
+		setSideBarTitle("Add Brand")
 		setShowCanvas(!showCanvas)
 		setPopupSidebarType("add_brand")
 
