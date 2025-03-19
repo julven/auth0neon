@@ -111,7 +111,7 @@ const AccountChangePassword = () => {
 			current: ""
 		})
 
-		alert("Password change success. ")
+		alert("Password Changed Successfully")
 		window.location.reload()
 		return
 
