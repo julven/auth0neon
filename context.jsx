@@ -384,7 +384,7 @@ let AppContextProvider = ({children}) => {
 
 	const getAllCountries =async () => {
 
-
+		console.log("getAllCountries")
 		let resp = await fetch('./src/country.json')
 
 		resp = await resp.json()
@@ -404,6 +404,7 @@ let AppContextProvider = ({children}) => {
 
 	const getBrands = async () => {
 
+		console.log("getBrands")
 
 		let resp = await fetchData(`SELECT * FROM brand where user_id = '${neonUser.user_id}'`, "/neon-query")
 

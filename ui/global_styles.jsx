@@ -197,6 +197,7 @@ const GlobalStyles = () =>{
 				 display:block;
 				line-height: 5px;
 				text-indent:-99999px;
+				background-color: #F8F8F8;
 			}
 			.brand-table tbody>tr:first-child>td:first-child{
 				border-top-left-radius: 15px;
@@ -234,6 +235,7 @@ const GlobalStyles = () =>{
 				 display:block;
 				line-height: 5px;
 				text-indent:-99999px;
+				background-color: #F8F8F8;
 			}
 			.input-radio {
 				accent-color: #650260;
