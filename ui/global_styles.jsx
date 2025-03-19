@@ -105,6 +105,16 @@ const GlobalStyles = () =>{
 				background-color: #F8F8F8;
 
 			}
+			.input3 {
+				border-radius: 25px;
+				border: 1px solid #650260;
+				padding: 0px 15px;
+			}	
+			.input3  input {
+				border:none;
+				background-color: #F8F8F8;
+			}
+
 			.button1 {
 				height: 50px;
 				width: 100%;
@@ -120,6 +130,13 @@ const GlobalStyles = () =>{
 				border-radius: 25px;
 				
 			}
+			.button3 {
+				border: 1px solid #650260;
+				border-radius: 25px;
+				cursor: "pointer";
+				color:  #650260;
+
+			}
 			.navbar-sidebar {
 				width: 250px;
 			 	background-image: linear-gradient(to bottom,  #CB3974, #FF9933);
@@ -133,6 +150,92 @@ const GlobalStyles = () =>{
 			.slider {
 				accent-color:#650260;
 			}
+			.brand-table th:first-child{
+				border-top-left-radius: 15px;
+				border-bottom-left-radius: 15px;
+			
+		
+			}
+			.brand-table th:last-child{
+				border-top-right-radius: 15px;
+				border-bottom-right-radius: 15px;
+			
+	
+				
+			}
+
+			.brand-table th {
+				height: 50px;
+				background-color:  #650260;
+				color: white;
+				height: 50px;
+				text-align: center;
+				padding: 0px 10px;
+			}
+			.brand-table {
+				width: 100%;
+				font-family: poppins;
+				 overflow:hidden; 
+		        white-space:nowrap; 
+		        text-overflow: ellipsis;
+
+			}
+			.brand-table td {
+				text-align: center;
+				height: 50px;
+				padding: 0px 10px;
+
+				
+			}
+			.brand-table tbody {
+				background-color:  white;
+	
+
+			}
+			.brand-table>tbody:before {
+				content:"@";
+				 display:block;
+				line-height: 5px;
+				text-indent:-99999px;
+			}
+			.brand-table tbody>tr:first-child>td:first-child{
+				border-top-left-radius: 15px;
+			}
+			.brand-table tbody>tr:first-child>td:last-child{
+				border-top-right-radius: 15px;
+			}
+			.brand-table tbody>tr:last-child>td:first-child{
+				border-bottom-left-radius: 15px;
+			}
+			.brand-table tbody>tr:last-child>td:last-child{
+				border-bottom-right-radius: 15px;
+			}
+			.brand-table tbody>tr:last-child>td{
+				border-bottom: 0!important;
+
+			}
+			.middle-row-th{
+				border-left: 1px solid lightgray;
+				border-rigt: 1px solid lightgray;
+			}
+
+			.middle-row-td{
+				border-left: 1px solid lightgray;
+				border-rigt: 1px solid lightgray;
+				border-bottom: 1px solid lightgray;
+			}
+
+			.brand-table td:first-child{
+			
+				border-bottom: 1px solid lightgray;
+			}
+			.brand-table tbody:after {
+				content:"@";
+				 display:block;
+				line-height: 5px;
+				text-indent:-99999px;
+			}
+
 
 		`}
 		</style>

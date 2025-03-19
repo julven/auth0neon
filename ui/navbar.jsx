@@ -88,9 +88,9 @@ const UiNavbar = (props) => {
 
 									<span className="align-self-center">Account</span>
 									<i className="bi bi-chevron-down align-self-center" style={{width: 15}}></i>
-									<div style={{width: 40, height: 40, borderRadius: 50}} className="gradiant-h d-flex justify-content-center">
+									{/*<div style={{width: 40, height: 40, borderRadius: 50}} className="gradiant-h d-flex justify-content-center">
 										<span className="align-self-center fw-bold text-white">{getInitals()}</span>
-									</div>
+									</div>*/}
 								</div>
 								
 							</Link>

@@ -27,6 +27,10 @@ const Brand = () => {
 		console.log({brandList})
 	}, [brandList])
 
+	if(ui) return <UiBrand 
+		brandList={brandList}
+
+		/>
 
 	return(
 		<div >	
