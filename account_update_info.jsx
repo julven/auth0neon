@@ -103,10 +103,10 @@ const AccountUpdateInfo = ({
 								<p className="poppins mb-1 fw-bold">EMAIL ADDRESS</p>
 								<UiInput1 field="email" value={userLocal.email || ''} userChangeHandler={userChangeHandler} readOnly={true}/>
 							</div>	
-							<div className="col-md-6">
+							{/*<div className="col-md-6">
 								<p className="poppins mb-1 fw-bold">PHONE</p>
 								<UiInput1 field="mobile" />
-							</div>
+							</div>*/}
 						</div>
 
 						<div className="row  mb-3">
@@ -128,7 +128,7 @@ const AccountUpdateInfo = ({
 							
 						</div>
 
-						<div className="row  mb-3">
+					{/*	<div className="row  mb-3">
 							<div className="col-md-12">
 								<p className="poppins mb-1 fw-bold">ADDRESS 1</p>
 								<UiInput1 field="location"/>
@@ -142,7 +142,7 @@ const AccountUpdateInfo = ({
 								<UiInput1 field="location"/>
 							</div>
 							
-						</div>
+						</div>*/}
 
 						<div className="row  mb-3">
 							<div className="col-md-6">
@@ -150,21 +150,21 @@ const AccountUpdateInfo = ({
 								<UiInput1 field="country" countries={countries} value={userLocal.country} userChangeHandler={userChangeHandler}/>
 							</div>
 
-							<div className="col-md-6">
+							{/*<div className="col-md-6">
 								<p className="poppins mb-1 fw-bold">CITY</p>
 								<UiInput1 field="location"/>
-							</div>
+							</div>*/}
 							
 						</div>
 
 
-						<div className="row  mb-3">
+						{/*<div className="row  mb-3">
 							<div className="col-md-6">
 								<p className="poppins mb-1 fw-bold">ZIP CODE</p>
 								<UiInput1 field="zip" />
 							</div>
 							
-						</div>
+						</div>*/}
 
 					</div>
 
