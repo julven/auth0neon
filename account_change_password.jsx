@@ -61,7 +61,7 @@ const AccountChangePassword = () => {
 		},
 		function(err) {
 			console.log({err})
-			setGeneralMessage("current password is wrong.")
+			setGeneralMessage("Current password is wrong.")
 			setError(true)
 			return
 		});
@@ -99,11 +99,11 @@ const AccountChangePassword = () => {
 		// setError(false)
 
 		if(!resp.user_id) {
-			setGeneralMessage("error in proceed password reply from server")
+			setGeneralMessage("Error in proceed password reply from server")
 			setError(false)
 		}
 
-		setGeneralMessage("Password change success")
+		setGeneralMessage("Password Changed Successfully")
 		setError(false)
 		setPassword({
 			confirm: "",
