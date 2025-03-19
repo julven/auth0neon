@@ -4,6 +4,7 @@ const BrandAdd = () => {
 	const {
 		fetchData,
 		neonUser,
+		getBrands,
 	} = useContext(AppContext)
 
 	const [selectedStatus, setSelectedSatus] =useState(null)
@@ -50,6 +51,18 @@ const BrandAdd = () => {
 
 
 	const createBrand = async () => {
+
+
+		// console.log({
+		// 	brandName,
+		// 	selectedStatus,
+		// 	selectedAccountType,
+		// 	adsManagement,
+		// 	vendorRevenueType,
+		// })
+
+		// return
+
 		setErrorList([])
 		setGeneralMessage("")
 
@@ -64,9 +77,11 @@ const BrandAdd = () => {
 				valid  = false
 			}
 		})
+		console.log({err})
 		setErrorList(err)
+
 		if(!valid) {
-			setGeneralMessage("required fields must not be empty.")
+			setGeneralMessage("Required fields must not be empty.")
 			return
 		}
 
@@ -114,7 +129,7 @@ const BrandAdd = () => {
 		setBrandName("")
 		setSelectedSatus(null)
 		setSelectedAccountType("")
-		
+		getBrands()
 
 	}
 
@@ -125,6 +140,23 @@ const BrandAdd = () => {
 	useEffect(() => {
 		getAccountType()
 	}, [])
+
+	if(ui) return <UiPopupSidebarAddBrand 
+		generalMessage={generalMessage}
+		goBack={goBack}
+		brandName={brandName}
+		errorList={errorList}
+		setSelectedSatus={setSelectedSatus}
+		accountTypeList={accountTypeList}
+		setSelectedAccountType={setSelectedAccountType}
+		adsManagementChangeHandler={adsManagementChangeHandler}
+		setVendorRevenueType={setVendorRevenueType}
+		selectedAccountType={selectedAccountType}
+		createBrand={createBrand}
+		setBrandName={setBrandName}
+
+		/>
+	
 
 	return(
 		<div>
@@ -142,7 +174,7 @@ const BrandAdd = () => {
 
 			<p>status: &nbsp;{errorList.includes("selectedStatus") && 'required'}<br/>
 			<input type="radio" name="status"onChange={e => setSelectedSatus(true)}/> Active 
-			<input type="radio" name="status"  onChange={e => setSelectedSatus(false)}/> Inactive
+			<input type="radio" name="status" onChange={e => setSelectedSatus(false)}/> Inactive
 			</p>
 
 			<p>account type &nbsp;{errorList.includes("selectedAccountType") && 'required'}<br/>

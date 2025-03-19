@@ -3,7 +3,7 @@ const UiInput1 = ({field, value, userChangeHandler, countries,readOnly}) => {
 	return(
 		<div className="input1" >
 			<div className="d-flex gap-2 justify-content-between">
-				<div style={{width: 20}}>
+				<div style={{width: 20}} hidden={!field}>
 					<img src={
 						field == "email" ? 
 						"./src/email.png" 

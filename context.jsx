@@ -48,6 +48,14 @@ let AppContextProvider = ({children}) => {
 	const [countries, setCountries] = useState([])
 	const [hh, setHh] = useState(0)
 
+	const [offCanvas, setOffCanvas] = useState(null)
+
+	const [popupSidebarType, setPopupSidebarType] = useState("")
+
+	const [showCanvas, setShowCanvas] = useState(false)
+
+	const [brandList, setBrandList] = useState([])
+
 
 	const fetchData = async (query,endpoint) => {
 	
@@ -394,6 +402,16 @@ let AppContextProvider = ({children}) => {
 		setHh(h)
 	}
 
+	const getBrands = async () => {
+
+
+		let resp = await fetchData(`SELECT * FROM brand where user_id = '${neonUser.user_id}'`, "/neon-query")
+
+		// console.log({getBrands: {resp}})
+
+		setBrandList(resp)
+	}
+
 
 
 	return (
@@ -437,6 +455,11 @@ let AppContextProvider = ({children}) => {
 			countries, setCountries,
 			hh, setHh,
 			getSrollHeight,
+			offCanvas, setOffCanvas,
+			popupSidebarType, setPopupSidebarType,
+			showCanvas, setShowCanvas,
+			getBrands,
+			brandList, setBrandList
 		}}>
 
 			{children}

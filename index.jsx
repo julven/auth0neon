@@ -15,6 +15,7 @@ const Index = () => {
 		fetchData,
 		neonUser, setNeonUser,
 		getNeonUser,
+		offCanvas, setOffCanvas,
 
 	} = useContext(AppContext)
 
@@ -55,7 +56,12 @@ const Index = () => {
 	}
 
 	
+	const initOffCanvas = () => {
 
+		let el = document.querySelector("#offcanvasRight")
+
+		setOffCanvas(new bootstrap.Offcanvas(el))
+	}
 
 
 
@@ -63,6 +69,8 @@ const Index = () => {
 		console.log("index")
 		getInitUrl()
 		checkToken()
+
+		initOffCanvas()
 
 	}, [])
 
@@ -99,6 +107,7 @@ root.render(
 		<HashRouter>
 			
 				<Index />
+				<UiPopupSidebar />
 				<GlobalStyles />
 		</HashRouter>
 	</AppContextProvider>

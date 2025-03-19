@@ -3,19 +3,22 @@ const Brand = () => {
 	const {
 		fetchData,
 		neonUser,
+		getBrands,
+		brandList, setBrandList,
+		
 	}= useContext(AppContext)
 
-	const [brandList, setBrandList] = useState([])
+	
 
-	const getBrands = async () => {
+	// const getBrands = async () => {
 
 
-		let resp = await fetchData(`SELECT * FROM brand where user_id = '${neonUser.user_id}'`, "/neon-query")
+	// 	let resp = await fetchData(`SELECT * FROM brand where user_id = '${neonUser.user_id}'`, "/neon-query")
 
-		// console.log({getBrands: {resp}})
+	// 	// console.log({getBrands: {resp}})
 
-		setBrandList(resp)
-	}
+	// 	setBrandList(resp)
+	// }
 
 	useEffect(() => {
 		if(neonUser.user_id) {

@@ -235,6 +235,13 @@ const GlobalStyles = () =>{
 				line-height: 5px;
 				text-indent:-99999px;
 			}
+			.input-radio {
+				accent-color: #650260;
+				width: 16px;
+				height: 16px;
+				border-color:#650260;
+			}
+			
 
 
 		`}

@@ -2,9 +2,12 @@ const UiBrand = ({
 	brandList
 }) => {
 
+	const { offCanvas, setPopupSidebarType, showCanvas, setShowCanvas, } = useContext(AppContext)
+
 	const [test, setTest] = useState([1,2,3])
 	const [displayList, setDislpayList] = useState([])
 	const [search, setSearch] = useState("")
+	
 
 
 
@@ -16,6 +19,18 @@ const UiBrand = ({
 		
 
 		setDislpayList(list)
+	}
+
+	const toggleCanvas = () => {
+		if(showCanvas) return offCanvas.show();
+		offCanvas.hide()
+		
+	}
+
+	const showCanvasHandler = () => {
+		setShowCanvas(!showCanvas)
+		setPopupSidebarType("add_brand")
+
 	}
 
 	useEffect(() => {
@@ -32,6 +47,10 @@ const UiBrand = ({
 		filterList()
 	},[search])
 
+	useEffect( () => {
+		if(offCanvas) toggleCanvas()
+	}, [showCanvas])
+
 
 	return (
 		<div className="p-4 d-flex flex-column gap-3">
@@ -40,7 +59,7 @@ const UiBrand = ({
 				<UiButton3 />
 				<div className="d-flex gap-2">
 					<UiInput3 value={search} setSearch={setSearch}/>
-					<UiButton3 w={"130px"} text={"Brands"} left={true} logo={"./src/plus.png"}/>
+					<UiButton3 w={"130px"} text={"Brands"} left={true} logo={"./src/plus.png"} submit={showCanvasHandler}/>
 				</div>
 				
 			</div>
@@ -55,7 +74,7 @@ const UiBrand = ({
 							<th className="middle-row-th">Ads Management</th>
 							<th className="middle-row-th">Start Date</th>
 							<th className="middle-row-th">Status</th>
-							<th>Action</th>
+							<th className="middle-row-th">Action</th>
 						</tr>
 
 					</thead>
@@ -95,10 +114,7 @@ const UiBrand = ({
 					}
 						
 					</tbody>
-
 				</table>
-
-
 			</div>
 		</div>
 	)
