@@ -400,6 +400,8 @@ let AppContextProvider = ({children}) => {
 		console.log({getAllCountries: resp})
 
 		setCountries(resp)
+
+		return
 	}
 
 	const getSrollHeight = (h) => {
@@ -415,6 +417,8 @@ let AppContextProvider = ({children}) => {
 		// console.log({getBrands: {resp}})
 
 		setBrandList(resp)
+
+		return
 	}
 
 

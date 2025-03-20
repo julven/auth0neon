@@ -41,7 +41,7 @@ const UiBrand = ({
 		setSideBarTitle(title)
 		setPopupSidebarType(type)
 		setShowCanvas(!showCanvas)
-		if(x) navigate("/brand/edit/"+x)
+		if(x) navigate("/brand/id/"+x)
 		
 
 	}
@@ -118,9 +118,13 @@ const UiBrand = ({
 										
 										{x['active?'] ?
 
-										<img src="./src/brand.png" className="w-100"/>
+										<img 
+										onClick={() => showCanvasHandler("Deactivate this Account?", "off_brand", x.id)}
+										src="./src/brand.png" className="w-100"/>
 										:
-										<img src="./src/brand-on.png" className="w-100"/>
+										<img
+										onClick={() => showCanvasHandler("Activate Account", "on_brand", x.id)}
+										 src="./src/brand-on.png" className="w-100"/>
 										}
 									</div>
 								</div>
