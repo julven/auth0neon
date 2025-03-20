@@ -170,7 +170,7 @@ const AccountUpdateInfo = ({
 
 					<div style={{maxWidth: 300}}>	
 						<UiButton1 text="Update Profile" submit={submitHandler}/>
-						<a href="#" onClick={logoutHandler}>logout</a>
+						{/*<a href="#" onClick={logoutHandler}>logout</a>*/}
 					</div>
 				</div>
 			</div> 

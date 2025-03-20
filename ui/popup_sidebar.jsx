@@ -20,7 +20,10 @@ const UiPopupSidebar = () => {
 			  <div style={{height: 2}} className="gradiant-h mb-4"></div>
 			  <div className="offcanvas-body p-0" >
 			  {popupSidebarType == 'add_brand' ?
-			  	<BrandAdd />
+			  <BrandAdd />
+			  :
+			  popupSidebarType == 'edit_brand' ?
+			  <BrandEdit />
 			  :
 			  null
 			  }

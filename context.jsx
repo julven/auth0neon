@@ -58,6 +58,8 @@ let AppContextProvider = ({children}) => {
 
 	const [sidebarTitle, setSideBarTitle] = useState("")
 
+	const [editBrandId, setEditBrandId] = useState("")
+
 
 	const fetchData = async (query,endpoint) => {
 	
@@ -463,7 +465,8 @@ let AppContextProvider = ({children}) => {
 			showCanvas, setShowCanvas,
 			getBrands,
 			brandList, setBrandList,
-			sidebarTitle, setSideBarTitle
+			sidebarTitle, setSideBarTitle,
+			editBrandId, setEditBrandId,
 		}}>
 
 			{children}

@@ -15,6 +15,15 @@ const UiNavbar = (props) => {
 		setWidth(h)
 	}
 
+	const logoutHandler = async () => {
+		await webAuth.logout({
+		  returnTo: baseUrl+"/callback",
+		  clientID: client
+		});
+
+		setToken(null)
+	}
+
 	const getInitals = () => {
 
 		return ((neonUser.first_name[0] || "ME") + (neonUser.last_name[0] || "")).toUpperCase()
@@ -40,30 +49,47 @@ const UiNavbar = (props) => {
 	return (
 		<div className="d-flex">
 			<div className="navbar-sidebar">
-				<Link to="/">
-					<div className="d-flex justify-content-center">
-						<div style={{width: 130}} className="m-3">	
-							<img src="./src/logo-dash.png" className="w-100"/>
+				<div className="d-flex justify-content-between flex-column h-100">
+					<div>
+						<Link to="/">
+							<div className="d-flex justify-content-center">
+								<div style={{width: 130}} className="m-3">	
+									<img src="./src/logo-dash.png" className="w-100"/>
+								</div>
+								
+							</div>
+						</Link>
+						<hr className="text-white m-0"/>
+
+
+
+						<div className="m-4 d-flex flex-column gap-3">
+							{path == ("/") ?
+							<SidebarDashboardBrand path={path}/>
+							:
+							path.includes("/account") ? 
+							<SidebarAccount path={path}/>
+							:
+							<SidebarDashboardBrand path={path}/>
+							}	
 						</div>
-						
 					</div>
-				</Link>
-				<hr className="text-white m-0"/>
 
+					<div className="d-flex gap-2 p-4" onClick={logoutHandler} style={{cursor: "pointer"}}>
+						<div style={{width: 35, height: 35, }} className="p-1 rounded off-icon">
+							{/*<img src="./src/account-on.png" className="w-100 opacity-100"  />*/}
+						</div>
 
+						<p className="text-white fs-6 m-0  align-self-center">Logout</p>
+					</div>
 
-				<div className="m-4 d-flex flex-column gap-3">
-				{path == ("/") ?
-				<SidebarDashboardBrand path={path}/>
-				:
-				path.includes("/account") ? 
-				<SidebarAccount path={path}/>
-				:
-				<SidebarDashboardBrand path={path}/>
-				}	
 				</div>
 
+				
+
+				
 			</div>
+
 
 			<div style={{width: width - 250}}>
 				<div style={{height: 80}} className="bg-white w-100 px-5">
@@ -115,6 +141,7 @@ const UiNavbar = (props) => {
 								<>
 								<Route path="/subscription" element={<Subscription />}/>
 								<Route path="/brand" element={<Brand />}/>
+								<Route path="/brand/edit/:id" element={<Brand />}/>
 								<Route path="/brand-auth/:id" element={<BrandAuth />}/>
 								<Route path="/brand-auth-view/:id" element={<BrandAuthView />}/>
 								<Route path="/brand-add" element={<BrandAdd />}/>

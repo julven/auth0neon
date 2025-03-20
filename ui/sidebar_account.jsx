@@ -4,6 +4,7 @@ const SidebarAccount = ({path}) => {
 
 
 	return (
+		
 		<div className="d-flex flex-column gap-3">
 
 			<UiButton2 text={"Back to Dashboard"} submit={() => navigate("/brand")}/>

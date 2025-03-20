@@ -13,7 +13,7 @@ const UiInput1 = ({field, value, userChangeHandler, countries,readOnly}) => {
 						"./src/profile-circle.png"
 						:
 
-						 ["agency_name", "aname"].includes(field) ?
+						 ["agency_name", "aname", "brand"].includes(field) ?
 						"./src/building.png" 	
 						:
 						["zip", "marketplace", "country"].includes(field)?

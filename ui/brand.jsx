@@ -2,12 +2,19 @@ const UiBrand = ({
 	brandList
 }) => {
 
+	let navigate = useNavigate()
+	let {id} = useParams()
+
 	const { offCanvas, setPopupSidebarType, showCanvas, setShowCanvas,
-	sidebarTitle, setSideBarTitle } = useContext(AppContext)
+	sidebarTitle, setSideBarTitle,
+	editBrandId, setEditBrandId,
+	 } = useContext(AppContext)
 
 	const [test, setTest] = useState([1,2,3])
 	const [displayList, setDislpayList] = useState([])
 	const [search, setSearch] = useState("")
+
+
 	
 
 
@@ -28,10 +35,14 @@ const UiBrand = ({
 		
 	}
 
-	const showCanvasHandler = () => {
-		setSideBarTitle("Add Brand")
+	const showCanvasHandler	 = (title, type, x) => {
+		// console.log({showCanvasHandler: x})
+		// return;
+		setSideBarTitle(title)
+		setPopupSidebarType(type)
 		setShowCanvas(!showCanvas)
-		setPopupSidebarType("add_brand")
+		if(x) navigate("/brand/edit/"+x)
+		
 
 	}
 
@@ -53,6 +64,11 @@ const UiBrand = ({
 		if(offCanvas) toggleCanvas()
 	}, [showCanvas])
 
+	useEffect(() => {
+		console.log({id})
+		if(id) setEditBrandId(id)
+	}, [id])
+
 
 	return (
 		<div className="p-4 d-flex flex-column gap-3">
@@ -61,7 +77,7 @@ const UiBrand = ({
 				<UiButton3 />
 				<div className="d-flex gap-2">
 					<UiInput3 value={search} setSearch={setSearch}/>
-					<UiButton3 w={"130px"} text={"Brands"} left={true} logo={"./src/plus.png"} submit={showCanvasHandler}/>
+					<UiButton3 w={"130px"} text={"Brands"} left={true} logo={"./src/plus.png"} submit={() => showCanvasHandler("Add Brand","add_brand")}/>
 				</div>
 				
 			</div>
@@ -92,7 +108,9 @@ const UiBrand = ({
 							
 							<td className="middle-row-td">
 								<div className="d-flex gap-3 justify-content-center">
-									<div className="" style={{width: 20, height: 20}}>
+									<div 
+									onClick={() => showCanvasHandler("Edit Brand", "edit_brand", x.id)}
+									className="" style={{width: 20, height: 20, cursor: "pointer"}}>
 										<img src="./src/edit.png" className="w-100"/>
 									</div>
 

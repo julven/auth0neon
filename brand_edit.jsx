@@ -1,12 +1,15 @@
 const BrandEdit = () => {
 
 	const navigate = useNavigate()
-	const {id} = useParams()
+	const param = useParams()
+	const { id } = param
 
 
 	const {
 		fetchData,
 		neonUser,
+		editBrandId,
+		getBrands
 	} = useContext(AppContext)
 
 	const [brand, setBrand] = useState({})
@@ -59,8 +62,14 @@ const BrandEdit = () => {
 
 	const getBrand = async () => {
 
+		
+		console.log("getBrand")
+
+		// let sql = `
+		// 	SELECT * FROM brand WHERE user_id = '${neonUser.user_id}' AND id = ${id}
+		// `
 		let sql = `
-			SELECT * FROM brand WHERE user_id = '${neonUser.user_id}' AND id = ${id}
+			SELECT * FROM brand WHERE user_id = '${neonUser.user_id}' AND id = ${editBrandId}
 		`
 
 		let resp = await fetchData(sql, "/neon-query")
@@ -73,7 +82,7 @@ const BrandEdit = () => {
 		return
 	}
 
-	const brandChangeHandler = (field, value) => {
+	const brandChangeHandler = (value,field) => {
 		setBrand({
 			...brand,
 			[field] : value
@@ -81,6 +90,11 @@ const BrandEdit = () => {
 	}	
 
 	const updateBrand = async () => {
+
+
+
+		// console.log({updateBrand: {brand}})
+		// return
 
 		setErrorList([])
 		setGeneralMessage("")
@@ -104,6 +118,17 @@ const BrandEdit = () => {
 			return
 		}
 
+		// let sql = `
+		// 	UPDATE brand SET 
+		// 	brand = '${brand.brand}',
+		// 	"active?" = ${brand["active?"]},
+		// 	account_type = '${brand.account_type}',
+		// 	ads_management = ${brand.ads_management.length > 0 ? `ARRAY [${brand.ads_management.map( x => `'${x}'`).join(",")}]`: null},
+		// 	vendor_revenue_type = '${brand.vendor_revenue_type}'
+		// 	WHERE id = ${id}
+
+		// `
+
 		let sql = `
 			UPDATE brand SET 
 			brand = '${brand.brand}',
@@ -111,7 +136,7 @@ const BrandEdit = () => {
 			account_type = '${brand.account_type}',
 			ads_management = ${brand.ads_management.length > 0 ? `ARRAY [${brand.ads_management.map( x => `'${x}'`).join(",")}]`: null},
 			vendor_revenue_type = '${brand.vendor_revenue_type}'
-			WHERE id = ${id}
+			WHERE id = ${editBrandId}
 
 		`
 
@@ -122,8 +147,8 @@ const BrandEdit = () => {
 			return;
 		}
 
-		setGeneralMessage("brand info successfully updated")
-
+		setGeneralMessage("Brand info successfully updated.")
+		getBrands()
 		return
 	}
 
@@ -167,12 +192,16 @@ const BrandEdit = () => {
 	}
 
 	useEffect(() => {
-		if(neonUser.user_id && id && accountTypeList.length > 0) getBrand()
-	}, [neonUser, id, accountTypeList])
+		if(neonUser.user_id && editBrandId && accountTypeList.length > 0) getBrand()
+	}, [neonUser, editBrandId, accountTypeList])
 
 	useEffect(() => {
 		getAccountType()
 	}, [])
+
+	useEffect(() => {
+		console.log({param})
+	}, [param])
 
 	useEffect(() => {
 		// console.log({brand})
@@ -180,6 +209,21 @@ const BrandEdit = () => {
 	}, [brand])
 
 
+
+	if(ui) return <UiPopupSidebarEditBrand 
+		goBack={goBack}
+		generalMessage={generalMessage}
+		brandEntityId={brandEntityId}
+		setBrandEntityId={setBrandEntityId}
+		updateEntityId={updateEntityId}
+		brand={brand}
+		errorList={errorList}
+		brandChangeHandler={brandChangeHandler}
+		accountTypeList={accountTypeList}
+		adsManagementChangeHandler={adsManagementChangeHandler}
+		setBrand={setBrand}
+		updateBrand={updateBrand}
+		/>
 
 	return (
 		<div>
@@ -192,13 +236,13 @@ const BrandEdit = () => {
 			</p>
 			<p>
 			brand name: 
-			<input type="text" value={brand.brand || ''} onChange={e => brandChangeHandler('brand',e.target.value)}/>
+			<input type="text" value={brand.brand || ''} onChange={e => brandChangeHandler(e.target.value, 'brand')}/>
 			&nbsp;{errorList.includes("brand") && 'required'}
 			</p>
 
 			<p>status: &nbsp;{errorList.includes("active?") && 'required'}<br/>
-			<input type="radio" name="status" checked={brand['active?'] || false} onChange={e => brandChangeHandler('active?',true)}/> Active 
-			<input type="radio" name="status" checked={!brand['active?'] || false} onChange={e => brandChangeHandler('active?',false)}/> Inactive
+			<input type="radio" name="status" checked={brand['active?'] || false} onChange={e => brandChangeHandler(true, 'active?',)}/> Active 
+			<input type="radio" name="status" checked={!brand['active?'] || false} onChange={e => brandChangeHandler(false, 'active?')}/> Inactive
 			</p>
 
 			<p>account type &nbsp;{errorList.includes("account_type") && 'required'}<br/>
