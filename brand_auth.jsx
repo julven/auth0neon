@@ -13,7 +13,7 @@ const BrandAuth = () => {
 
 	const [brand, setBrand] = useState({})
 	const [selectedMarketPlace, setSelectedMarketPlace] = useState("")
-	const [selectedDate, setSelectedDate] = useState(moment().format("YYYY-MM-DD"))
+	const [selectedDate, setSelectedDate] = useState()
 
 	const [errorList, setErrorList] = useState([])
 	const [generalMessage, setGeneralMessage] = useState([])
@@ -24,14 +24,29 @@ const BrandAuth = () => {
 
 	const getBrands = async () => {
 
+		// console.log({getBrands:{id}})
+		// return
+
 
 		let resp = await fetchData(`SELECT * FROM brand where brand_entity_id = '${id}' AND user_id = '${neonUser.user_id}'`, "/neon-query")
 
 		console.log({getBrands: {resp}})
 
-		if(resp.length == 0) navigate("/brand")
+		if(resp.length == 0) return navigate("/brand")
 
 		setBrand(resp[0])
+	}
+
+	const changeCreateDate = async () => {
+		setGeneralMessage("")
+		setErrorList([])
+
+		let resp = await fetchData(`
+			UPDATE brand set created = '${selectedDate}'
+			
+		`,"/neon-query")
+
+		setGeneralMessage("Start date successfully updated.")
 	}
 
 	const brandChangeHandler = (field, value) => {
@@ -44,7 +59,7 @@ const BrandAuth = () => {
 	const goBack = (e) => {
 		e.preventDefault()
 
-		navigate(-1)
+		navigate("/brand")
 	}
 
 	const addMarketPlace = async () => {
@@ -137,7 +152,7 @@ const BrandAuth = () => {
 
 		let resp = data[0], agency = data[1], company_list = data[2]
 
-		console.log({getAuthorizedMarketplace: {data}})
+		// console.log({getAuthorizedMarketplace: {data}})
 
 		// return
 
@@ -204,30 +219,32 @@ const BrandAuth = () => {
 	},[neonUser, brand, marketplaceList])
 
 	useEffect(() => {
-		console.log({selectedMarketPlace})
-	}, [selectedMarketPlace])
-	useEffect(() => {
-		console.log({brand})
-	}, [brand])
+		console.log({authorizedMarketplaceList})
+	}, [authorizedMarketplaceList])
 
 	useEffect(() => {
-		console.log({selectedMarketPlace})
-	}, [selectedMarketPlace])
+		// console.log({brand})
+		if(brand.created) setSelectedDate(moment(brand.created).format("YYYY-MM-DD"))
+	}, [brand])
+
+	// useEffect(() => {
+	// 	console.log({selectedMarketPlace})
+	// }, [selectedMarketPlace])
 
 	const ShowLinkOrStatus =  ({x}) => {
 
 		const [auth, setAuth] = useState({})
 
-		useEffect(() => {
-			(async () => {
-				let resp = await getSellerId(x)
-				setAuth(resp)
-			})()
+		// useEffect(() => {
+		// 	(async () => {
+		// 		let resp = await getSellerId(x)
+		// 		setAuth(resp)
+		// 	})()
 			
-		}, [])
+		// }, [])
 
 		useEffect(() => {
-			console.log({auth})
+			console.log({ShowLinkOrStatus: x})
 		}, [auth])
 
 		let url = [
@@ -245,10 +262,9 @@ const BrandAuth = () => {
 
 		url = encodeURI(url.join("&"))
 		url = `https://authorize.biusers.com?`+url
-		if("id" in auth) 
-		return(
+		if(auth.id) return(
 			<>
-				{auth.profile_active_status && auth.info_active_status ? 	
+				{auth.company.profile_active_status && auth.company.info_active_status ? 	
 				"active"
 				:
 				'inactive'
@@ -257,14 +273,31 @@ const BrandAuth = () => {
 			</>
 				
 			
-		)
+		);
 		else return <a href={url} title={url} onClick={() => setShowUrl(url)} target="_blank">authenticate</a>
 		
 	}
 
 
 
-	
+	if(ui) return <UiBrandAuth 
+		goBack={goBack}
+		generalMessage={generalMessage}
+		brand={brand}
+		brandChangeHandler={brandChangeHandler}
+		selectedDate={selectedDate}
+		setSelectedDate={setSelectedDate}
+		errorList={errorList}
+		showUrl={showUrl}
+		selectedMarketPlace={selectedMarketPlace}
+		setSelectedMarketPlace={setSelectedMarketPlace}
+		marketplaceList={marketplaceList}
+		authorizedMarketplaceList={authorizedMarketplaceList}
+		addMarketPlace={addMarketPlace}
+		ShowLinkOrStatus={ShowLinkOrStatus}
+		getSellerId={getSellerId}
+		changeCreateDate={changeCreateDate}
+		/>
 
 
 
@@ -330,7 +363,7 @@ const BrandAuth = () => {
 
 							<td>
 								<div>
-								<Link to={`/brand-auth-view/${x.id}`}>view</Link>
+									<Link to={`/brand-auth-view/${x.id}`}>view</Link>
 								</div>
 							</td>
 						</tr>

@@ -99,11 +99,11 @@ const UiBrand = ({
 					<tbody>
 					{displayList && displayList.map( x => (
 						<tr key={x.id}>
-							<td title={x.brand} style={{maxWidth:220}} className="text-truncate">{x.brand}</td>
-							<td className="middle-row-td">{x.account_type}</td>
-							<td className="middle-row-td">{[undefined, false, null, "null",""].includes(x.vendor_revenue_type) ? "" : x.vendor_revenue_type}</td>
-							<td className="middle-row-td">{x.ads_management ? x.ads_management.join("/") : ""}</td>
-							<td className="middle-row-td">{moment(x.created).format("MMM, D YYYY")}</td>
+							<td onClick={() => navigate("/brand/auth/"+x.brand_entity_id)} title={x.brand} style={{maxWidth:220,}} className="text-truncate">{x.brand}</td>
+							<td onClick={() => navigate("/brand/auth/"+x.brand_entity_id)} className="middle-row-td">{x.account_type}</td>
+							<td onClick={() => navigate("/brand/auth/"+x.brand_entity_id)} className="middle-row-td">{[undefined, false, null, "null",""].includes(x.vendor_revenue_type) ? "" : x.vendor_revenue_type}</td>
+							<td onClick={() => navigate("/brand/auth/"+x.brand_entity_id)} className="middle-row-td">{x.ads_management ? x.ads_management.join("/") : ""}</td>
+							<td onClick={() => navigate("/brand/auth/"+x.brand_entity_id)} className="middle-row-td">{moment(x.created).format("MMM, D YYYY")}</td>
 							{x["active?"] ? <td className="text-success middle-row-td">Active</td>:<td className="middle-row-td text-danger">Inactive</td>}
 							
 							<td className="middle-row-td">

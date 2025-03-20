@@ -218,12 +218,14 @@ const GlobalStyles = () =>{
 			.middle-row-th{
 				border-left: 1px solid lightgray;
 				border-rigt: 1px solid lightgray;
+
 			}
 
 			.middle-row-td{
 				border-left: 1px solid lightgray;
 				border-rigt: 1px solid lightgray;
 				border-bottom: 1px solid lightgray;
+				cursor: pointer;
 			}
 
 			.brand-table td:first-child{
@@ -242,6 +244,11 @@ const GlobalStyles = () =>{
 				width: 16px;
 				height: 16px;
 				border-color:#650260;
+			}
+			.input-date::-webkit-inner-spin-button,
+			.input-date::-webkit-calendar-picker-indicator {
+			    display: none;
+			    -webkit-appearance: none;
 			}
 			
 

@@ -142,6 +142,7 @@ const UiNavbar = (props) => {
 								<Route path="/subscription" element={<Subscription />}/>
 								<Route path="/brand" element={<Brand />}/>
 								<Route path="/brand/id/:id" element={<Brand />}/>
+								<Route path="/brand/auth/:id" element={<BrandAuth />}/>
 								<Route path="/brand-auth/:id" element={<BrandAuth />}/>
 								<Route path="/brand-auth-view/:id" element={<BrandAuthView />}/>
 								<Route path="/brand-add" element={<BrandAdd />}/>

@@ -62,7 +62,7 @@ let AppContextProvider = ({children}) => {
 
 
 	const fetchData = async (query,endpoint) => {
-	
+		console.log({fetchData: {query, endpoint}})
 		let headerData = new Headers()
 		headerData.append("Content-Type", "application/json");
 		let data = null

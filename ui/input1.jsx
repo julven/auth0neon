@@ -1,4 +1,6 @@
-const UiInput1 = ({field, value, userChangeHandler, countries,readOnly}) => {
+const UiInput1 = (props) => {
+	const {field, value, userChangeHandler, countries,readOnly} = props
+
 
 	return(
 		<div className="input1" >
@@ -31,8 +33,14 @@ const UiInput1 = ({field, value, userChangeHandler, countries,readOnly}) => {
 				{["marketplace", "country"].includes(field) ?
 					<select className="flex-grow-1 poppins w-100" value={value}  onChange={e => userChangeHandler(e.target.value, field)}>
 						<option className="poppins">-select-</option>
-						{countries.map( x => (
+						{countries && countries.map( x => (
 						<option className="poppins" key={x.cca2} value={x.cca2} >{x.name.common}</option>
+
+						))
+
+						}
+						{props.marketplace &&  props.marketplace.map( (x, i) => (
+						<option className="poppins" key={i} value={x.id} >{x.country}</option>
 
 						))
 
