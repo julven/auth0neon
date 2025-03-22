@@ -200,14 +200,14 @@ const GlobalStyles = () =>{
 	
 
 			}
-			.brand-table>tbody:before {
-				content:"@";
-				 display:block;
-				line-height: 5px;
-				text-indent:-99999px;
-				background-color: #F8F8F8;
-				opacity: 0;
-			}
+			// .brand-table>tbody:before {
+			// 	content:"@";
+			// 	 display:block;
+			// 	line-height: 5px;
+			// 	text-indent:-99999px;
+			// 	opacity: 0!important;
+				
+			// }
 			.brand-table tbody>tr:first-child>td:first-child{
 				border-top-left-radius: 15px;
 			}
@@ -241,14 +241,15 @@ const GlobalStyles = () =>{
 			
 				border-bottom: 1px solid lightgray;
 			}
-			.brand-table tbody:after {
-				content:"@";
-				 display:block;
-				line-height: 5px;
-				text-indent:-99999px;
-				background-color: #F8F8F8;
-			opacity: 0;
-			}
+			// .brand-table tbody:after {
+			// 	content:"@";
+			// 	 display:block;
+			// 	line-height: 5px;
+			// 	text-indent:-99999px;
+			// 	opacity: 0;
+				
+				
+			// }
 			.input-radio {
 				accent-color: #650260;
 				width: 16px;

@@ -3,7 +3,7 @@ const UiBrandAuth = (props) => {
 	const { fetchData } = useContext(AppContext)
 
 	const [profiles, setProfiles] = useState([])
-
+	const navigate = useNavigate()
 
 	let {
 		goBack,
@@ -19,7 +19,7 @@ const UiBrandAuth = (props) => {
 		marketplaceList,
 		addMarketPlace,
 		changeCreateDate,
-		navigate
+		
 	} = props
 
 	const getProfiles = async  (brand_entity_id) => {
@@ -133,7 +133,7 @@ const UiBrandAuth = (props) => {
 							<th className="middle-row-th">Seller Status</th>
 							<th className="middle-row-th">PPC Status</th>
 							<th className="middle-row-th">DSP Status</th>
-							<th>Action</th>
+							<th className="middle-row-th">Action</th>
 						</tr>
 
 					</thead>

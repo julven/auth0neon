@@ -1,7 +1,7 @@
 const BrandAuthView = () => {
 
 	let   navigate = useNavigate()
-	let { id, type } = useParams()
+	let { id } = useParams()
 
 
 	let [authorizedMarketPlace, setAuthorizedMarketplace] = useState({})
@@ -96,7 +96,7 @@ const BrandAuthView = () => {
 		authorizedMarketPlace={authorizedMarketPlace}
 		authorizationUrl={authorizationUrl}
 		goBack={goBack}
-		type={type}
+		
 		navigate={navigate}
 		/>
 	}

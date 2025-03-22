@@ -1,11 +1,13 @@
 const UiBrandAuthView = (props) => {
 
+	
+
 	const {
 		authorizedMarketPlace,
 		authorizationUrl,
 		goBack,	
-		type,
-		navigate,
+		
+		
 	} = props
 
 	const {fetchData, neonUser} = useContext(AppContext)
@@ -154,8 +156,8 @@ const UiBrandAuthView = (props) => {
 	
 	if(authorizedMarketPlace.id) return(
 		<div  className="p-4 d-flex flex-column gap-3">
-			<div className="d-flex gap-2">
-				<UiButton3 submit={() => navigate(-1)}/>
+			<div className="d-flex gap-2" onClick={goBack}>
+				<UiButton3 submit={null}/>
 				<p className="mb-0 align-self-center fs-4">Authorization > {authorizedMarketPlace.marketPlace.country}</p>
 			</div>
 
@@ -327,5 +329,5 @@ const UiBrandAuthView = (props) => {
 		</div>
 
 	)
-	else return <span className="poppins">loading</span>
+	else return <span className="poppins">loading...</span>
 }

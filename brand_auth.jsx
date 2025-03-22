@@ -1,7 +1,7 @@
 const BrandAuth = () => {
 
 	const navigate = useNavigate()
-	const { id } = useParams()
+	const { id  } = useParams()
 	const {
 		fetchData,
 		neonUser,
@@ -24,13 +24,14 @@ const BrandAuth = () => {
 
 	const getBrands = async () => {
 
+
 		// console.log({getBrands:{id}})
 		// return
 
 
 		let resp = await fetchData(`SELECT * FROM brand where brand_entity_id = '${id}' AND user_id = '${neonUser.user_id}'`, "/neon-query")
 
-		console.log({getBrands: {resp}})
+		console.log({BrandAuth:{getBrands: {resp}}})
 
 		if(resp.length == 0) return navigate("/brand")
 
@@ -59,7 +60,7 @@ const BrandAuth = () => {
 	const goBack = (e) => {
 		e.preventDefault()
 
-		navigate("/brand")
+		// navigate("/brand")
 	}
 
 	const addMarketPlace = async () => {
