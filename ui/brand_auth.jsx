@@ -19,6 +19,7 @@ const UiBrandAuth = (props) => {
 		marketplaceList,
 		addMarketPlace,
 		changeCreateDate,
+		navigate
 	} = props
 
 	const getProfiles = async  (brand_entity_id) => {
@@ -96,7 +97,7 @@ const UiBrandAuth = (props) => {
 		<div  className="p-4 d-flex flex-column gap-3">
 			<div className="d-flex gap-2">
 				<UiButton3 submit={goBack}/>
-				<p className="mb-0 align-self-center fs-4">Authorization</p>
+				<p className="mb-0 align-self-center fs-4">Authorization </p>
 				
 			</div>
 			{generalMessage != "" ? <span className={errorList.length > 0 ? 'text-danger' : 'text-success'}>{generalMessage}</span>: null}
@@ -152,7 +153,7 @@ const UiBrandAuth = (props) => {
 							</td>
 							<td className="middle-row-td">
 								<div className="d-flex gap-1 justify-content-center">
-									<div style={{width: 20, height: 20}}>
+									<div onClick={() => navigate("/brand/auth/view/"+x.id)} style={{width: 20, height: 20}}>
 										<img src="./src/view.png" style={{width: "100%"}}/>
 									</div>
 

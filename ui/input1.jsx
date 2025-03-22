@@ -15,7 +15,7 @@ const UiInput1 = (props) => {
 						"./src/profile-circle.png"
 						:
 
-						 ["agency_name", "aname", "brand"].includes(field) ?
+						 ["agency_name", "aname", "brand", "sellerVendor"].includes(field) ?
 						"./src/building.png" 	
 						:
 						["zip", "marketplace", "country"].includes(field)?
@@ -30,9 +30,9 @@ const UiInput1 = (props) => {
 						null
 						}  style={{width: "100%"}}/>
 				</div>
-				{["marketplace", "country"].includes(field) ?
+				{["marketplace", "country", 'sellerVendor'].includes(field) ?
 					<select className="flex-grow-1 poppins w-100" value={value}  onChange={e => userChangeHandler(e.target.value, field)}>
-						<option className="poppins">-select-</option>
+						<option className="poppins" value="">-select-</option>
 						{countries && countries.map( x => (
 						<option className="poppins" key={x.cca2} value={x.cca2} >{x.name.common}</option>
 
@@ -41,6 +41,12 @@ const UiInput1 = (props) => {
 						}
 						{props.marketplace &&  props.marketplace.map( (x, i) => (
 						<option className="poppins" key={i} value={x.id} >{x.country}</option>
+
+						))
+
+						}
+						{props.sellerVendorList &&  props.sellerVendorList.map( (x, i) => (
+						<option className="poppins" key={i} value={x.profile_id}>{x.sellerName}</option>
 
 						))
 

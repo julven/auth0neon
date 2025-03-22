@@ -297,6 +297,7 @@ const BrandAuth = () => {
 		ShowLinkOrStatus={ShowLinkOrStatus}
 		getSellerId={getSellerId}
 		changeCreateDate={changeCreateDate}
+		navigate={navigate}
 		/>
 
 

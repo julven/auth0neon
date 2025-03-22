@@ -75,7 +75,15 @@ const GlobalStyles = () =>{
 				padding: 25px 25px;
 				border-radius: 15px;		
 				background-color: white;
-			}	
+			}
+
+			.container2 {
+
+				border-radius: 15px;		
+				background-color: white;
+				padding: 20px 0px;
+			}
+
 			.login-container {
 				width: 450px;
 				padding: 20px 0px;
@@ -198,6 +206,7 @@ const GlobalStyles = () =>{
 				line-height: 5px;
 				text-indent:-99999px;
 				background-color: #F8F8F8;
+				opacity: 0;
 			}
 			.brand-table tbody>tr:first-child>td:first-child{
 				border-top-left-radius: 15px;
@@ -238,6 +247,7 @@ const GlobalStyles = () =>{
 				line-height: 5px;
 				text-indent:-99999px;
 				background-color: #F8F8F8;
+			opacity: 0;
 			}
 			.input-radio {
 				accent-color: #650260;
@@ -249,6 +259,27 @@ const GlobalStyles = () =>{
 			.input-date::-webkit-calendar-picker-indicator {
 			    display: none;
 			    -webkit-appearance: none;
+			}
+
+			.tab-on {
+				background-color: #ff9933;
+				
+				border-top-left-radius: 8px;
+				border-top-right-radius: 8px;
+				min-width: 70px;
+				
+				color: white;
+
+			}
+			.tab-off {
+				background-color: none;
+				
+				border-top-left-radius: 8px;
+				border-top-right-radius: 8px;
+				min-width: 70px;
+				
+				color: dark;
+
 			}
 			
 

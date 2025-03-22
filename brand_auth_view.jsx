@@ -1,7 +1,7 @@
 const BrandAuthView = () => {
 
 	let   navigate = useNavigate()
-	let { id } = useParams()
+	let { id, type } = useParams()
 
 
 	let [authorizedMarketPlace, setAuthorizedMarketplace] = useState({})
@@ -58,7 +58,7 @@ const BrandAuthView = () => {
 
 	}
 
-	let authorizationUrl = () => {
+	let authorizationUrl = (seller_vendor) => {
 		let x = authorizedMarketPlace;
 		let url = [
 			
@@ -66,7 +66,7 @@ const BrandAuthView = () => {
 			`country=${x.marketPlace.countrycode}`,
 			`api_type=${`spapi`}`,
 			`companyName=${x.brand}`,
-			`type=${x.account_type == 'seller' ? 'seller_central' : x.account_type == 'vendor' ? 'vendor_central': ''}`,
+			seller_vendor ? `type=${seller_vendor}` : `type=${x.account_type == 'seller' ? 'seller_central' : x.account_type == 'vendor' ? 'vendor_central': ''}`,
 	 		`agency=${neonUser.agency_name}`,
 	 		`agency_email=${neonUser.agency_id}`,
 	 		`email=${x.brand_entity_id}`,
@@ -91,6 +91,16 @@ const BrandAuthView = () => {
 		if(marketplaceList.length == 0 ) getMarketPlace()
 	}, [])
 
+	if(ui) { 
+		return <UiBrandAuthView 
+		authorizedMarketPlace={authorizedMarketPlace}
+		authorizationUrl={authorizationUrl}
+		goBack={goBack}
+		type={type}
+		navigate={navigate}
+		/>
+	}
+
 	return (
 		
 		<div>
@@ -106,8 +116,6 @@ const BrandAuthView = () => {
 			:
 			null
 			}
-			
-
 			
 		</div>
 
